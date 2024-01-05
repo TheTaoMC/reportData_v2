@@ -32,7 +32,8 @@ const header = (
   setState,
   onSearchFiltersChange
 ) => {
-  const { zuDelData, zu_SelectedList, zu_Url_Del, zu_Option_Del } = useStore();
+  const { zu_SelectedList, zu_Url_Del, zu_Option_Del } = useStore();
+  const { zuDelData } = useStore();
 
   //console.log("zu_Url,zu_Option: ", zu_Url_Del, zu_Option_Del);
 
@@ -57,7 +58,7 @@ const header = (
       const data = await addData(addDataURL, addDataBody, fetchdata);
       //console.log("typeof fetchdata : ", typeof fetchdata);
 
-      console.log("add data?????? ", data);
+    
       if (data) {
         await toast.current.show({
           severity: "info",
@@ -133,10 +134,7 @@ const header = (
 
   const accept = async () => {
     try {
-      const deletedData = await zuDelData(
-        zu_Url_Del,
-        zu_Option_Del,
-      );
+      const deletedData = await zuDelData(zu_Url_Del, zu_Option_Del);
       console.log("deletedData: ", deletedData);
       if (deletedData) {
         toast.current.show({

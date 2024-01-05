@@ -9,8 +9,16 @@ import { Checkbox } from "primereact/checkbox";
 import { useStore } from "../../zustand/Store";
 
 function AppWeighttype() {
-  const { zu_Data,zu_SelectedList } = useStore();
-  const { zuFetch, zuResetData, zuSetDel } = useStore();
+  const { zu_Data, zu_SelectedList, zu_toggle } = useStore();
+  const {
+    zuFetch,
+    zuSetFetch,
+    zuSetAdd,
+    zuResetData,
+    zuSetDel,
+    zuSetFromAddEdit,
+    zuSetDataID,
+  } = useStore();
   console.log(zu_SelectedList);
 
   const [data, setData] = useState("");
@@ -56,6 +64,14 @@ function AppWeighttype() {
     setWeightTypeName("");
     setFlagCancel(false);
   };
+  
+
+  useEffect(() => {
+    setDataID("");
+    setWeightTypeID("");
+    setWeightTypeName("");
+    setFlagCancel(false);
+  }, [zu_toggle]);
 
   const setState = () => {
     setDataID(data.DataID);
@@ -122,6 +138,26 @@ function AppWeighttype() {
     </div>
   );
 
+  //setFromAddEdit //AddData
+  useEffect(() => {
+    const uuidDataID = uuidv4();
+    const urladd =
+      "https://theotesteng.000webhostapp.com/API/api/weighttype/create.php";
+    const optionadd = {
+      method: "POST",
+      body: JSON.stringify({
+        DataID: weightTypeID === "" ? "" : uuidDataID,
+        WeightTypeID: weightTypeID,
+        WeightTypeName: weightTypeName,
+        FlagCancel: flagCancel ? "Y" : "N",
+      }),
+    };
+    zuSetDataID(uuidDataID, weightTypeID);
+    zuSetFromAddEdit(addedit);
+    zuSetAdd(urladd, optionadd);
+    console.log(urladd, optionadd);
+  }, [weightTypeName, weightTypeID, flagCancel]);
+
   //Load Data รอบแรก
   useEffect(() => {
     zuResetData();
@@ -130,25 +166,25 @@ function AppWeighttype() {
     const optionread = {
       method: "GET",
     };
-    zuFetch(urlread, optionread);
+    zuSetFetch(urlread, optionread);
+    zuFetch();
   }, []);
 
+  //setDel
   useEffect(() => {
-    /*  if (zu_SelectedList.length === 0) {
+    if (zu_SelectedList.length === 0) {
       return;
-    } */
-
+    }
     const urldel =
       "https://theotesteng.000webhostapp.com/API/api/weighttype/delete.php";
     const optiondel = {
       method: "POST",
       body: JSON.stringify({
-        DataID: /* zu_SelectedList.DataID || */ "",
+        DataID: zu_SelectedList.DataID ? zu_SelectedList.DataID : "",
       }),
     };
-
     zuSetDel(urldel, optiondel);
-  }, []);
+  }, [zu_SelectedList]);
 
   return (
     <div>

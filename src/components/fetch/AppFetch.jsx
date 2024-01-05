@@ -36,15 +36,7 @@ function AppFetch({
   const [datas2, setDatas2] = useRecoilState(storeDatas);
   const [url, setUrl] = useRecoilState(storeURL);
   const [option, setOption] = useRecoilState(storeOption);
-  //console.log("Load: ", url, option, datas2);
-  /*   const fetchdata = async () => {
-    try {
-      await fetchData(url, option, setDatas2);
-    } catch (error) {
-      console.error("Error deleting data:", error);
-      throw error; // ให้เรียก throw error เพื่อให้ catch ใน caller จัดการ
-    }
-  }; */
+
   const fetchdata = useCallback(async () => {
     try {
       await fetchData(url, option, setDatas2);
@@ -56,8 +48,6 @@ function AppFetch({
 
   //load Data
   useEffect(() => {
-    //fetchdata();
-    //console.log("load Data");
     if (url && setDatas2) {
       fetchdata();
     }

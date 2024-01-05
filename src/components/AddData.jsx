@@ -1,13 +1,33 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { storeForm } from "../recoilStore/Store";
-import { useRecoilValue } from "recoil";
+import { Toast } from "primereact/toast";
+
+import { useStore } from "../zustand/Store";
 
 const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
-  const form = useRecoilValue(storeForm);
+  const { zu_Form_AddEdit } = useStore();
+  const { zuAddData, zuToggle } = useStore();
+
+  const toast = useRef(null);
+  const save = async () => {
+    //const body = JSON.parse(zu_Option_Add.body);
+    const data = await zuAddData();
+    //console.log(data);
+    if (!data) {
+      toast.current.show({
+        severity: "warn",
+        summary: "แจ้งเตือน",
+        detail: "ข้อมูลไม่ถูกต้อง",
+        life: 3000,
+      });
+      return;
+    }
+    zuToggle();
+  };
   return (
     <>
+      <Toast ref={toast} />
       <Dialog
         header={title}
         visible={VisibleIn}
@@ -16,13 +36,16 @@ const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
           VisibleOut();
         }}
       >
-        {child}
-        {/* form */}
+        {/* child */}
+
+        {zu_Form_AddEdit}
 
         <div className="flex gap-2 mt-2">
           <Button
             onClick={() => {
-              SaveOut();
+              //SaveOut();
+              //zuAddData();
+              save();
             }}
             className="w-20"
             label="บันทึก"
