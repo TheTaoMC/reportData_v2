@@ -9,7 +9,8 @@ import { Checkbox } from "primereact/checkbox";
 import { useStore } from "../../zustand/Store";
 
 function AppWeighttype() {
-  const { zu_Data, zu_SelectedList, zu_toggle } = useStore();
+  const { zu_Data, zu_SelectedList, zu_toggleResetState, zu_toggleEdit } =
+    useStore();
   const {
     zuFetch,
     zuSetFetch,
@@ -18,8 +19,9 @@ function AppWeighttype() {
     zuSetDel,
     zuSetFromAddEdit,
     zuSetDataID,
+    zuSetEdit,
   } = useStore();
-  console.log(zu_SelectedList);
+  //console.log(zu_SelectedList);
 
   const [data, setData] = useState("");
   const [dataID, setDataID] = useState("");
@@ -64,21 +66,19 @@ function AppWeighttype() {
     setWeightTypeName("");
     setFlagCancel(false);
   };
-  
-
-  useEffect(() => {
-    setDataID("");
-    setWeightTypeID("");
-    setWeightTypeName("");
-    setFlagCancel(false);
-  }, [zu_toggle]);
-
+  console.log(zu_SelectedList);
   const setState = () => {
-    setDataID(data.DataID);
-    setWeightTypeID(data.WeightTypeID);
-    setWeightTypeName(data.WeightTypeName);
-    setFlagCancel(data.FlagCancel === "Y" ? true : false);
+    setDataID(zu_SelectedList.DataID);
+    setWeightTypeID(zu_SelectedList.WeightTypeID);
+    setWeightTypeName(zu_SelectedList.WeightTypeName);
+    setFlagCancel(zu_SelectedList.FlagCancel === "Y" ? true : false);
+    console.log("setState");
   };
+
+  //setState
+  useEffect(() => setState(), [zu_toggleEdit]);
+  //resetState
+  useEffect(() => resetState(), [zu_toggleResetState]);
 
   const upDatedataID = (selectedlist) => {
     //console.log("selectedlist:upDatedataID: ", selectedlist);
@@ -140,29 +140,49 @@ function AppWeighttype() {
 
   //setFromAddEdit //AddData
   useEffect(() => {
-    const uuidDataID = uuidv4();
-    const urladd =
-      "https://theotesteng.000webhostapp.com/API/api/weighttype/create.php";
-    const optionadd = {
-      method: "POST",
-      body: JSON.stringify({
-        DataID: weightTypeID === "" ? "" : uuidDataID,
-        WeightTypeID: weightTypeID,
-        WeightTypeName: weightTypeName,
-        FlagCancel: flagCancel ? "Y" : "N",
-      }),
-    };
-    zuSetDataID(uuidDataID, weightTypeID);
-    zuSetFromAddEdit(addedit);
-    zuSetAdd(urladd, optionadd);
-    console.log(urladd, optionadd);
+    if (zu_SelectedList.length === 0) {
+      console.log("Add...");
+      const uuidDataID = uuidv4();
+      const urladd =
+        "https://theothai.com/ttw_webreport/API/api/weighttype/create.php";
+      const optionadd = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: weightTypeID === "" ? "" : uuidDataID,
+          WeightTypeID: weightTypeID,
+          WeightTypeName: weightTypeName,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(uuidDataID, weightTypeID);
+      zuSetFromAddEdit(addedit);
+      zuSetAdd(urladd, optionadd);
+      console.log(urladd, optionadd);
+    } else {
+      console.log("Edit...");
+      const urledit =
+        "https://theothai.com/ttw_webreport/API/api/weighttype/update.php";
+      const optionedit = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: dataID,
+          WeightTypeID: weightTypeID,
+          WeightTypeName: weightTypeName,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(dataID, weightTypeID);
+      zuSetFromAddEdit(addedit);
+      zuSetEdit(urledit, optionedit);
+      console.log(urledit, optionedit);
+    }
   }, [weightTypeName, weightTypeID, flagCancel]);
 
   //Load Data รอบแรก
   useEffect(() => {
     zuResetData();
     const urlread =
-      "https://theotesteng.000webhostapp.com/API/api/weighttype/read.php";
+      "https://theothai.com/ttw_webreport/API/api/weighttype/read.php";
     const optionread = {
       method: "GET",
     };
@@ -176,7 +196,7 @@ function AppWeighttype() {
       return;
     }
     const urldel =
-      "https://theotesteng.000webhostapp.com/API/api/weighttype/delete.php";
+      "https://theothai.com/ttw_webreport/API/api/weighttype/delete.php";
     const optiondel = {
       method: "POST",
       body: JSON.stringify({

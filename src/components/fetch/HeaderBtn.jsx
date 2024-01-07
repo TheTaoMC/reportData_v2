@@ -33,7 +33,13 @@ const header = (
   onSearchFiltersChange
 ) => {
   const { zu_SelectedList, zu_Url_Del, zu_Option_Del } = useStore();
-  const { zuDelData } = useStore();
+  const {
+    zuDelData,
+    zuEditData,
+    zuToggleResetState,
+    zuToggleEdit,
+    zuSetTitleFromAddEdit,
+  } = useStore();
 
   //console.log("zu_Url,zu_Option: ", zu_Url_Del, zu_Option_Del);
 
@@ -44,7 +50,7 @@ const header = (
   //console.log(setSelectedlist);
 
   //บันทึกข้อมูล
-  const add = async () => {
+  /*   const add = async () => {
     if (addDataBody === null) {
       toast.current.show({
         severity: "warn",
@@ -58,7 +64,6 @@ const header = (
       const data = await addData(addDataURL, addDataBody, fetchdata);
       //console.log("typeof fetchdata : ", typeof fetchdata);
 
-    
       if (data) {
         await toast.current.show({
           severity: "info",
@@ -80,12 +85,12 @@ const header = (
       console.error("Error: ", error);
       throw error; // ให้เรียก throw error เพื่อให้ catch ใน caller จัดการ
     }
-  };
+  }; */
 
   //แก้ไข
-  const edit = async () => {
+  /*   const edit = async () => {
     try {
-      const data = await editData(
+      const data = await zuEditData(
         editDataURL,
         editDataBody,
         setSelectedlist,
@@ -114,7 +119,7 @@ const header = (
       console.error("Error deleting data:", error);
       throw error; // ให้เรียก throw error เพื่อให้ catch ใน caller จัดการ
     }
-  };
+  }; */
 
   //ลบข้อมูล
   /*   const del = async () => {
@@ -166,6 +171,7 @@ const header = (
     });
   };
 
+  //delete
   const confirmdel = () => {
     if (zu_SelectedList.length === 0) {
       console.log("ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการลบ");
@@ -212,18 +218,19 @@ const header = (
 
   //visible Dialog Add/Edit
   const handleClickAdd = () => {
+    zuToggleResetState();
     if (!visibleAdd) {
+      zuSetTitleFromAddEdit("add");
       setVisibleAdd(true);
-      resetState();
     } else {
       setVisibleAdd(false);
     }
   };
 
   const handleClickEdit = () => {
-    if (!selectedlist) {
+    //console.log(zu_SelectedList.length);
+    if (zu_SelectedList.length === 0) {
       console.log("ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข");
-      // คุณอาจต้องแสดงข้อความไปยังผู้ใช้ทาง UI ด้วย
       toast.current.show({
         severity: "warn",
         summary: "แจ้งเตือน",
@@ -234,8 +241,10 @@ const header = (
     }
 
     if (!visibleEdit) {
+      //console.log(zu_SelectedList.length);
+      zuSetTitleFromAddEdit("edit");
       setVisibleEdit(true);
-      setState();
+      zuToggleEdit();
     } else {
       setVisibleEdit(false);
     }
@@ -319,8 +328,8 @@ const header = (
             <AddData
               VisibleIn={visibleAdd}
               VisibleOut={handleClickAdd}
-              SaveOut={add}
-              child={child}
+              //SaveOut={add}
+              //child={child}
               title={"เพิ่มข้อมูล"}
             />
 
@@ -333,8 +342,8 @@ const header = (
             <AddData
               VisibleIn={visibleEdit}
               VisibleOut={handleClickEdit}
-              SaveOut={edit}
-              child={child}
+              //SaveOut={edit}
+              //child={child}
               title={"แก้ไข"}
             />
 

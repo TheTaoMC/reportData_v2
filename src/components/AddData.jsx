@@ -6,25 +6,41 @@ import { Toast } from "primereact/toast";
 import { useStore } from "../zustand/Store";
 
 const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
-  const { zu_Form_AddEdit } = useStore();
-  const { zuAddData, zuToggle } = useStore();
+  const { zu_Form_AddEdit, zu_DataID, zu_Title_Form_AddEdit } = useStore();
+  const { zuAddData, zuEditData, zuToggleResetState } = useStore();
 
   const toast = useRef(null);
   const save = async () => {
-    //const body = JSON.parse(zu_Option_Add.body);
-    const data = await zuAddData();
-    //console.log(data);
-    if (!data) {
-      toast.current.show({
-        severity: "warn",
-        summary: "แจ้งเตือน",
-        detail: "ข้อมูลไม่ถูกต้อง",
-        life: 3000,
-      });
-      return;
+    if (zu_Title_Form_AddEdit === "add") {
+      console.log("add");
+      const data = await zuAddData();
+      if (!data) {
+        toast.current.show({
+          severity: "warn",
+          summary: "แจ้งเตือน",
+          detail: "ข้อมูลไม่ถูกต้อง",
+          life: 3000,
+        });
+        return;
+      }
+      zuToggleResetState();
+    } else {
+      console.log("edit");
+      const data = await zuEditData();
+      console.log("edit:data: ", data);
+      if (!data) {
+        toast.current.show({
+          severity: "warn",
+          summary: "แจ้งเตือน",
+          detail: "ข้อมูลไม่ถูกต้อง",
+          life: 3000,
+        });
+        return;
+      }
+      zuToggleResetState();
     }
-    zuToggle();
   };
+
   return (
     <>
       <Toast ref={toast} />
