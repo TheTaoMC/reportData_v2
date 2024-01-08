@@ -19,6 +19,7 @@ function AppSearch({ onSearchFiltersChange }) {
     zuSetTitleFromAddEdit,
     zuToggleVisible,
     zuSetSearchFilters,
+    zuToggleSearch,
   } = useStore();
   const [dataCustomers, setDataCustomers] = useState([]);
   const [dataProducts, setDataProducts] = useState([]);
@@ -460,9 +461,14 @@ function AppSearch({ onSearchFiltersChange }) {
     }
   };
 
+  useEffect(() => {
+    zuSetSearchFilters(filters2);
+  }, []);
+
   const handleSearch = () => {
     //onSearchFiltersChange(filters2);
-    zuSetSearchFilters(filters2);
+    //zuSetSearchFilters(filters2);
+    zuToggleSearch();
   };
   return (
     <div>
