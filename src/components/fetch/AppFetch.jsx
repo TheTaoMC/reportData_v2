@@ -1,85 +1,29 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import {  useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import fetchData from "./FetchData";
 import header from "./HeaderBtn";
-import { useRecoilState } from "recoil";
-import { storeDatas, storeOption, storeURL } from "../../recoilStore/Store";
 
 import { useStore } from "../../zustand/Store";
 
 function AppFetch({
-  title,
+  
   sortField,
-  fetchDataURL,
-  delDataURL,
-  addDataURL,
-  editDataURL,
-  fetchDataBody,
-  delDataBody,
-  addDataBody,
-  editDataBody,
-  columns = [],
   minWidth,
-  selectedlistOut,
-  child,
-  resetState,
-  setState,
   onSearchFiltersChange,
 }) {
-  const { zu_Data, zuSelectedList } = useStore();
-
-  const [Datas, setDatas] = useState([]);
-  const [selectedlist, setSelectedlist] = useState(null);
+  const { zu_Data, zu_SelectedList, zu_Columns, zu_Title } = useStore();
+  const { zuSelectedList } = useStore();
   const dt = useRef(null);
 
-  const [datas2, setDatas2] = useRecoilState(storeDatas);
-  const [url, setUrl] = useRecoilState(storeURL);
-  const [option, setOption] = useRecoilState(storeOption);
-
-  const fetchdata = useCallback(async () => {
-    try {
-      await fetchData(url, option, setDatas2);
-    } catch (error) {
-      console.error("Error deleting data:", error);
-      throw error;
-    }
-  }, [url, option, setDatas2]);
-
-  //load Data
-  useEffect(() => {
-    if (url && setDatas2) {
-      fetchdata();
-    }
-  }, [url, setDatas2]);
-
   const funheader = () => {
-    return header(
-      title,
-      child,
-      selectedlist,
-      delDataURL,
-      delDataBody,
-      setSelectedlist,
-      fetchdata,
-      dt,
-      Datas,
-      columns,
-      addDataURL,
-      addDataBody,
-      editDataURL,
-      editDataBody,
-      resetState,
-      setState,
-      onSearchFiltersChange
-    );
+    return header( dt, onSearchFiltersChange);
   };
 
   return (
     <>
       <div className="max-w-[95%] mx-auto">
         <div className="text-3xl font-bold flex justify-center my-2">
-          {title}
+          {zu_Title}
         </div>
         <div className="card">
           <DataTable
@@ -102,17 +46,17 @@ function AppFetch({
             tableStyle={{ minWidth: minWidth }}
             //selection
             selectionMode="single"
-            selection={selectedlist}
+            selection={zu_SelectedList}
             onSelectionChange={(e) => {
-              setSelectedlist(e.value);
-              selectedlistOut(e.value);
+              //setSelectedlist(e.value);
+              //selectedlistOut(e.value);
               zuSelectedList(e.value);
               //v2
             }}
             dataKey="DataID"
             metaKeySelection={true}
           >
-            {columns.map((e, i) => (
+            {zu_Columns.map((e, i) => (
               <Column
                 key={i}
                 field={e.field}

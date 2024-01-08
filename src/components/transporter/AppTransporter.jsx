@@ -5,11 +5,30 @@ import AppFetch from "../fetch/AppFetch";
 
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
-import { useSetRecoilState } from "recoil";
-import { storeForm } from "../../recoilStore/Store";
 
+import { useStore } from "../../zustand/Store";
 
 function AppTransporter() {
+  const {
+    zu_Data,
+    zu_SelectedList,
+    zu_ToggleResetState,
+    zu_ToggleEdit,
+    zu_Title_Form_AddEdit,
+  } = useStore();
+  const {
+    zuFetch,
+    zuSetFetch,
+    zuSetAdd,
+    zuResetData,
+    zuSetDel,
+    zuSetFromAddEdit,
+    zuSetDataID,
+    zuSetEdit,
+    zuSetColumns,
+    zuSetTitle,
+  } = useStore();
+
   const [data, setData] = useState("");
   const [dataID, setDataID] = useState("");
   const [transporterID, setTransporterID] = useState("");
@@ -17,40 +36,6 @@ function AppTransporter() {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [flagCancel, setFlagCancel] = useState(false);
-
-  const fetchDataBody = {
-    method: "GET",
-  };
-  const delDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: data.DataID || "",
-    }),
-  };
-
-  const addDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: uuidv4(),
-      TransporterID: transporterID,
-      TransporterName: transporterName,
-      Address1: address1,
-      Address2: address2,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
-
-  const editDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: dataID,
-      TransporterID: transporterID,
-      TransporterName: transporterName,
-      Address1: address1,
-      Address2: address2,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
 
   const resetState = () => {
     setDataID("");
@@ -62,19 +47,18 @@ function AppTransporter() {
   };
 
   const setState = () => {
-    setDataID(data.DataID);
-    setTransporterID(data.TransporterID);
-    setTransporterName(data.TransporterName);
-    setAddress1(data.Address1);
-    setAddress2(data.Address2);
-    setFlagCancel(data.FlagCancel === "Y" ? true : false);
+    setDataID(zu_SelectedList.DataID);
+    setTransporterID(zu_SelectedList.TransporterID);
+    setTransporterName(zu_SelectedList.TransporterName);
+    setAddress1(zu_SelectedList.Address1);
+    setAddress2(zu_SelectedList.Address2);
+    setFlagCancel(zu_SelectedList.FlagCancel === "Y" ? true : false);
   };
 
-  const upDatedataID = (selectedlist) => {
-    console.log("selectedlist:AppProduct:2 ", selectedlist);
-
-    setData(selectedlist);
-  };
+  //setState
+  useEffect(() => setState(), [zu_ToggleEdit]);
+  //resetState
+  useEffect(() => resetState(), [zu_ToggleResetState]);
 
   const columns = [
     {
@@ -152,39 +136,88 @@ function AppTransporter() {
       </div>
     </div>
   );
-  const setForm = useSetRecoilState(storeForm);
+
+  //setFromAddEdit //AddData
   useEffect(() => {
-    setForm(addedit);
+    if (zu_Title_Form_AddEdit === "add") {
+      /* if (zu_SelectedList.length === 0) { */
+      console.log("Add...");
+      const uuidDataID = uuidv4();
+      const urladd =
+        "https://theothai.com/ttw_webreport/API/api/transporter/create.php";
+      const optionadd = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: transporterID === "" ? "" : uuidDataID,
+          TransporterID: transporterID,
+          TransporterName: transporterName,
+          Address1: address1,
+          Address2: address2,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(uuidDataID, transporterID);
+      zuSetFromAddEdit(addedit);
+      zuSetAdd(urladd, optionadd);
+      console.log(urladd, optionadd);
+    } else {
+      console.log("Edit...");
+      const urledit =
+        "https://theothai.com/ttw_webreport/API/api/transporter/update.php";
+      const optionedit = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: dataID,
+          TransporterID: transporterID,
+          TransporterName: transporterName,
+          Address1: address1,
+          Address2: address2,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(dataID, transporterID);
+      zuSetFromAddEdit(addedit);
+      zuSetEdit(urledit, optionedit);
+      console.log(urledit, optionedit);
+    }
+  }, [transporterID, transporterName, address1, address2, flagCancel]);
+
+  //Load Data รอบแรก
+  useEffect(() => {
+    zuResetData();
+    const urlread =
+      "https://theothai.com/ttw_webreport/API/api/transporter/read.php";
+    const optionread = {
+      method: "GET",
+      headers: {
+        //"API-KEY": "857F7237C03246028748D51C97D4BADE",
+      },
+    };
+    zuSetFetch(urlread, optionread);
+    zuSetColumns(columns);
+    zuSetTitle("ผู้ขนส่ง");
+    zuFetch();
   }, []);
+
+  //setDel
+  useEffect(() => {
+    if (zu_SelectedList.length === 0) {
+      return;
+    }
+    const urldel =
+      "https://theothai.com/ttw_webreport/API/api/transporter/delete.php";
+    const optiondel = {
+      method: "POST",
+      body: JSON.stringify({
+        DataID: zu_SelectedList.DataID ? zu_SelectedList.DataID : "",
+      }),
+    };
+    zuSetDel(urldel, optiondel);
+  }, [zu_SelectedList]);
   return (
     <div>
       <AppNavber />
-      <AppFetch
-        sortField={"TransporterName"}
-        title={"ผู้ขนส่ง"}
-        fetchDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/transporter/read.php"
-        }
-        delDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/transporter/delete.php"
-        }
-        addDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/transporter/create.php"
-        }
-        editDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/transporter/update.php"
-        }
-        fetchDataBody={fetchDataBody}
-        delDataBody={delDataBody}
-        addDataBody={transporterID === "" ? null : addDataBody}
-        editDataBody={editDataBody}
-        columns={columns}
-        minWidth={"10rem"}
-        selectedlistOut={upDatedataID}
-        child={addedit}
-        resetState={resetState}
-        setState={setState}
-      />
+      <AppFetch sortField={"TransporterName"} minWidth={"10rem"} />
     </div>
   );
 }

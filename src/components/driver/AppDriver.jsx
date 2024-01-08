@@ -5,52 +5,36 @@ import AppFetch from "../fetch/AppFetch";
 
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
-import { useSetRecoilState } from "recoil";
-import { storeForm } from "../../recoilStore/Store";
 
+import { useStore } from "../../zustand/Store";
 
 function AppDriver() {
-  const [data, setData] = useState("");
+  const {
+    zu_Data,
+    zu_SelectedList,
+    zu_ToggleResetState,
+    zu_ToggleEdit,
+    zu_Title_Form_AddEdit,
+  } = useStore();
+  const {
+    zuFetch,
+    zuSetFetch,
+    zuSetAdd,
+    zuResetData,
+    zuSetDel,
+    zuSetFromAddEdit,
+    zuSetDataID,
+    zuSetEdit,
+    zuSetColumns,
+    zuSetTitle,
+  } = useStore();
+
   const [dataID, setDataID] = useState("");
   const [driverID, setDriverID] = useState("");
   const [driverName, setDriverName] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [flagCancel, setFlagCancel] = useState(false);
-
-  const fetchDataBody = {
-    method: "GET",
-  };
-  const delDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: data.DataID || "",
-    }),
-  };
-
-  const addDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: uuidv4(),
-      DriverID: driverID,
-      DriverName: driverName,
-      Address1: address1,
-      Address2: address2,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
-
-  const editDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: dataID,
-      DriverID: driverID,
-      DriverName: driverName,
-      Address1: address1,
-      Address2: address2,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
 
   const resetState = () => {
     setDataID("");
@@ -62,19 +46,19 @@ function AppDriver() {
   };
 
   const setState = () => {
-    setDataID(data.DataID);
-    setDriverID(data.DriverID);
-    setDriverName(data.DriverName);
-    setAddress1(data.Address1);
-    setAddress2(data.Address2);
-    setFlagCancel(data.FlagCancel === "Y" ? true : false);
+    setDataID(zu_SelectedList.DataID);
+    setDriverID(zu_SelectedList.DriverID);
+    setDriverName(zu_SelectedList.DriverName);
+    setAddress1(zu_SelectedList.Address1);
+    setAddress2(zu_SelectedList.Address2);
+    setFlagCancel(zu_SelectedList.FlagCancel === "Y" ? true : false);
   };
 
-  const upDatedataID = (selectedlist) => {
-    console.log("selectedlist:AppProduct:2 ", selectedlist);
+  //setState
+  useEffect(() => setState(), [zu_ToggleEdit]);
+  //resetState
+  useEffect(() => resetState(), [zu_ToggleResetState]);
 
-    setData(selectedlist);
-  };
 
   const columns = [
     {
@@ -152,39 +136,88 @@ function AppDriver() {
       </div>
     </div>
   );
-  const setForm = useSetRecoilState(storeForm);
+
+  //setFromAddEdit //AddData
   useEffect(() => {
-    setForm(addedit);
+    if (zu_Title_Form_AddEdit === "add") {
+      /* if (zu_SelectedList.length === 0) { */
+      console.log("Add...");
+      const uuidDataID = uuidv4();
+      const urladd =
+        "https://theothai.com/ttw_webreport/API/api/driver/create.php";
+      const optionadd = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: driverID === "" ? "" : uuidDataID,
+          DriverID: driverID,
+          DriverName: driverName,
+          Address1: address1,
+          Address2: address2,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(uuidDataID, driverID);
+      zuSetFromAddEdit(addedit);
+      zuSetAdd(urladd, optionadd);
+      console.log(urladd, optionadd);
+    } else {
+      console.log("Edit...");
+      const urledit =
+        "https://theothai.com/ttw_webreport/API/api/driver/update.php";
+      const optionedit = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: dataID,
+          DriverID: driverID,
+          DriverName: driverName,
+          Address1: address1,
+          Address2: address2,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(dataID, driverID);
+      zuSetFromAddEdit(addedit);
+      zuSetEdit(urledit, optionedit);
+      console.log(urledit, optionedit);
+    }
+  }, [driverID, driverName, address1, address2, flagCancel]);
+
+  //Load Data รอบแรก
+  useEffect(() => {
+    zuResetData();
+    const urlread =
+      "https://theothai.com/ttw_webreport/API/api/driver/read.php";
+    const optionread = {
+      method: "GET",
+      headers: {
+        //"API-KEY": "857F7237C03246028748D51C97D4BADE",
+      },
+    };
+    zuSetFetch(urlread, optionread);
+    zuSetColumns(columns);
+    zuSetTitle("พนักงานขับรถ");
+    zuFetch();
   }, []);
+
+  //setDel
+  useEffect(() => {
+    if (zu_SelectedList.length === 0) {
+      return;
+    }
+    const urldel =
+      "https://theothai.com/ttw_webreport/API/api/driver/delete.php";
+    const optiondel = {
+      method: "POST",
+      body: JSON.stringify({
+        DataID: zu_SelectedList.DataID ? zu_SelectedList.DataID : "",
+      }),
+    };
+    zuSetDel(urldel, optiondel);
+  }, [zu_SelectedList]);
   return (
     <div>
       <AppNavber />
-      <AppFetch
-        sortField={"DriverID"}
-        title={"พนักงานขับรถ"}
-        fetchDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/driver/read.php"
-        }
-        delDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/driver/delete.php"
-        }
-        addDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/driver/create.php"
-        }
-        editDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/driver/update.php"
-        }
-        fetchDataBody={fetchDataBody}
-        delDataBody={delDataBody}
-        addDataBody={driverID === "" ? null : addDataBody}
-        editDataBody={editDataBody}
-        columns={columns}
-        minWidth={"10rem"}
-        selectedlistOut={upDatedataID}
-        child={addedit}
-        resetState={resetState}
-        setState={setState}
-      />
+      <AppFetch sortField={"DriverName"} minWidth={"10rem"} />
     </div>
   );
 }

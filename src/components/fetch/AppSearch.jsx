@@ -8,14 +8,25 @@ import fetchData from "./FetchData";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 
+import { useStore } from "../../zustand/Store";
+
 function AppSearch({ onSearchFiltersChange }) {
+  const {
+    zuDelData,
+    zuEditData,
+    zuToggleResetState,
+    zuToggleEdit,
+    zuSetTitleFromAddEdit,
+    zuToggleVisible,
+    zuSetSearchFilters,
+  } = useStore();
   const [dataCustomers, setDataCustomers] = useState([]);
   const [dataProducts, setDataProducts] = useState([]);
   const [dataWeighttypes, setDataWeighttypes] = useState([]);
   const [dataDrivers, setDataDrivers] = useState([]);
   const [dataTransporters, setDataTransporters] = useState([]);
   //console.log("dataTransporters: ", dataTransporters);
-  const [filters, setFilters] = useState({
+  /*   const [filters, setFilters] = useState({
     WeightScaleIDInFilter: false,
     weightScaleIDOutFilter: false,
     SequenceWeightInFilter: false,
@@ -34,7 +45,7 @@ function AppSearch({ onSearchFiltersChange }) {
     FlagStatusFilter: false,
     FlagCancelFilter: false,
     FlagPaymentFilter: false,
-  });
+  }); */
 
   const [filters2, setFilters2] = useState([
     {
@@ -152,27 +163,32 @@ function AppSearch({ onSearchFiltersChange }) {
   const fetchDataAndSetState = async () => {
     try {
       await fetchData(
-        "https://theotesteng.000webhostapp.com/API/api/customer/read.php",
-        { method: "GET" },
+        "https://theothai.com/ttw_webreport/API/api/customer/read.php",
+        {
+          method: "GET",
+          headers: {
+            "API-KEY": "857F7237C03246028748D51C97D4BADE",
+          },
+        },
         setDataCustomers
       );
       await fetchData(
-        "https://theotesteng.000webhostapp.com/API/api/product/read.php",
+        "https://theothai.com/ttw_webreport/API/api/product/read.php",
         { method: "GET" },
         setDataProducts
       );
       await fetchData(
-        "https://theotesteng.000webhostapp.com/API/api/weighttype/read.php",
+        "https://theothai.com/ttw_webreport/API/api/weighttype/read.php",
         { method: "GET" },
         setDataWeighttypes
       );
       await fetchData(
-        "https://theotesteng.000webhostapp.com/API/api/driver/read.php",
+        "https://theothai.com/ttw_webreport/API/api/driver/read.php",
         { method: "GET" },
         setDataDrivers
       );
       await fetchData(
-        "https://theotesteng.000webhostapp.com/API/api/transporter/read.php",
+        "https://theothai.com/ttw_webreport/API/api/transporter/read.php",
         { method: "GET" },
         setDataTransporters
       );
@@ -445,7 +461,8 @@ function AppSearch({ onSearchFiltersChange }) {
   };
 
   const handleSearch = () => {
-    onSearchFiltersChange(filters2);
+    //onSearchFiltersChange(filters2);
+    zuSetSearchFilters(filters2);
   };
   return (
     <div>

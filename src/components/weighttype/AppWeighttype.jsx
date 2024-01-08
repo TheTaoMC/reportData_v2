@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
@@ -9,8 +9,13 @@ import { Checkbox } from "primereact/checkbox";
 import { useStore } from "../../zustand/Store";
 
 function AppWeighttype() {
-  const { zu_Data, zu_SelectedList, zu_toggleResetState, zu_toggleEdit } =
-    useStore();
+  const {
+    zu_Data,
+    zu_SelectedList,
+    zu_ToggleResetState,
+    zu_ToggleEdit,
+    zu_Title_Form_AddEdit,
+  } = useStore();
   const {
     zuFetch,
     zuSetFetch,
@@ -20,8 +25,10 @@ function AppWeighttype() {
     zuSetFromAddEdit,
     zuSetDataID,
     zuSetEdit,
+    zuSetColumns,
+    zuSetTitle,
   } = useStore();
-  //console.log(zu_SelectedList);
+  //console.log("zu_ToggleEdit: ", zu_ToggleEdit);
 
   const [data, setData] = useState("");
   const [dataID, setDataID] = useState("");
@@ -66,7 +73,7 @@ function AppWeighttype() {
     setWeightTypeName("");
     setFlagCancel(false);
   };
-  console.log(zu_SelectedList);
+  //console.log(zu_SelectedList);
   const setState = () => {
     setDataID(zu_SelectedList.DataID);
     setWeightTypeID(zu_SelectedList.WeightTypeID);
@@ -76,9 +83,9 @@ function AppWeighttype() {
   };
 
   //setState
-  useEffect(() => setState(), [zu_toggleEdit]);
+  useEffect(() => setState(), [zu_ToggleEdit]);
   //resetState
-  useEffect(() => resetState(), [zu_toggleResetState]);
+  useEffect(() => resetState(), [zu_ToggleResetState]);
 
   const upDatedataID = (selectedlist) => {
     //console.log("selectedlist:upDatedataID: ", selectedlist);
@@ -140,7 +147,8 @@ function AppWeighttype() {
 
   //setFromAddEdit //AddData
   useEffect(() => {
-    if (zu_SelectedList.length === 0) {
+    if (zu_Title_Form_AddEdit === "add") {
+      /* if (zu_SelectedList.length === 0) { */
       console.log("Add...");
       const uuidDataID = uuidv4();
       const urladd =
@@ -187,6 +195,8 @@ function AppWeighttype() {
       method: "GET",
     };
     zuSetFetch(urlread, optionread);
+    zuSetColumns(columns);
+    zuSetTitle("ประเภทชั่ง");
     zuFetch();
   }, []);
 
@@ -211,8 +221,7 @@ function AppWeighttype() {
       <AppNavber />
       <AppFetch
         sortField={"WeightTypeName"}
-        title={"ประเภทชั่ง"}
-        fetchDataURL={
+        /* fetchDataURL={
           "https://theotesteng.000webhostapp.com/API/api/weighttype/read.php"
         }
         delDataURL={
@@ -223,18 +232,18 @@ function AppWeighttype() {
         }
         editDataURL={
           "https://theotesteng.000webhostapp.com/API/api/weighttype/update.php"
-        }
-        fetchDataBody={fetchDataBody}
-        delDataBody={delDataBody}
-        addDataBody={weightTypeID === "" ? null : addDataBody}
-        editDataBody={editDataBody}
-        columns={columns}
+        } */
+        //fetchDataBody={fetchDataBody}
+        //delDataBody={delDataBody}
+        //addDataBody={weightTypeID === "" ? null : addDataBody}
+        //editDataBody={editDataBody}
+        //columns={columns}
         minWidth={"10rem"}
-        selectedlistOut={upDatedataID}
-        child={addedit}
-        resetState={resetState}
-        setState={setState}
-        dataID={dataID}
+        //selectedlistOut={upDatedataID}
+        //child={addedit}
+        //resetState={resetState}
+        //setState={setState}
+        //dataID={dataID}
       />
     </div>
   );

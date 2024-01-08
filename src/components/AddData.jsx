@@ -1,13 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 
 import { useStore } from "../zustand/Store";
 
-const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
-  const { zu_Form_AddEdit, zu_DataID, zu_Title_Form_AddEdit } = useStore();
-  const { zuAddData, zuEditData, zuToggleResetState } = useStore();
+const AddData = () => {
+  const { zu_Form_AddEdit, zu_Title_Form_AddEdit, zu_ToggleVisible } =
+    useStore();
+  const { zuAddData, zuEditData, zuToggleResetState, zuToggleVisible } =
+    useStore();
 
   const toast = useRef(null);
   const save = async () => {
@@ -22,7 +24,15 @@ const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
           life: 3000,
         });
         return;
+      } else {
+        toast.current.show({
+          severity: "",
+          summary: "แจ้งเตือน",
+          detail: "เพิ่มข้อมูลสำเร็จ]",
+          life: 3000,
+        });
       }
+
       zuToggleResetState();
     } else {
       console.log("edit");
@@ -36,8 +46,16 @@ const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
           life: 3000,
         });
         return;
+      } else {
+        toast.current.show({
+          severity: "success",
+          summary: "แจ้งเตือน",
+          detail: "แก้ไข้อมูลสำเร็จ",
+          life: 3000,
+        });
       }
       zuToggleResetState();
+      zuToggleVisible();
     }
   };
 
@@ -45,22 +63,18 @@ const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
     <>
       <Toast ref={toast} />
       <Dialog
-        header={title}
-        visible={VisibleIn}
+        header={zu_Title_Form_AddEdit === "add" ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}
+        visible={zu_ToggleVisible}
         style={{ width: "70vw" }}
         onHide={() => {
-          VisibleOut();
+          zuToggleVisible();
         }}
       >
-        {/* child */}
-
         {zu_Form_AddEdit}
 
         <div className="flex gap-2 mt-2">
           <Button
             onClick={() => {
-              //SaveOut();
-              //zuAddData();
               save();
             }}
             className="w-20"
@@ -70,7 +84,8 @@ const AddData = ({ VisibleIn, VisibleOut, SaveOut, child, title }) => {
           <Button
             className="w-20"
             onClick={() => {
-              VisibleOut();
+              zuToggleResetState();
+              zuToggleVisible();
             }}
             label="ยกเลิก"
           />

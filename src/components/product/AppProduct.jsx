@@ -6,52 +6,35 @@ import AppFetch from "../fetch/AppFetch";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Checkbox } from "primereact/checkbox";
-import { storeForm, storeOption, storeURL } from "../../recoilStore/Store";
-import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { useStore } from "../../zustand/Store";
 
 function AppProduct() {
-  const {  zuFetch, zuResetData } = useStore();
+  const {
+    zu_Data,
+    zu_SelectedList,
+    zu_ToggleResetState,
+    zu_ToggleEdit,
+    zu_Title_Form_AddEdit,
+  } = useStore();
+  const {
+    zuFetch,
+    zuSetFetch,
+    zuSetAdd,
+    zuResetData,
+    zuSetDel,
+    zuSetFromAddEdit,
+    zuSetDataID,
+    zuSetEdit,
+    zuSetColumns,
+    zuSetTitle,
+  } = useStore();
 
-  const [data, setData] = useState("");
   const [dataID, setDataID] = useState("");
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState(0.0);
   const [flagCancel, setFlagCancel] = useState(false);
-
-  const fetchDataBody = {
-    method: "GET",
-  };
-  const delDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: data.DataID || "",
-    }),
-  };
-
-  const addDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: uuidv4(),
-      ProductID: productID,
-      ProductName: productName,
-      Price: price,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
-
-  const editDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: dataID,
-      ProductID: productID,
-      ProductName: productName,
-      Price: price,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
 
   const resetState = () => {
     setDataID("");
@@ -62,18 +45,16 @@ function AppProduct() {
   };
 
   const setState = () => {
-    setDataID(data.DataID);
-    setProductID(data.ProductID);
-    setProductName(data.ProductName);
-    setPrice(data.Price);
-    setFlagCancel(data.FlagCancel === "Y" ? true : false);
+    setDataID(zu_SelectedList.DataID);
+    setProductID(zu_SelectedList.ProductID);
+    setProductName(zu_SelectedList.ProductName);
+    setPrice(zu_SelectedList.Price);
+    setFlagCancel(zu_SelectedList.FlagCancel === "Y" ? true : false);
   };
-
-  const upDatedataID = (selectedlist) => {
-    console.log("selectedlist:AppProduct:2 ", selectedlist);
-
-    setData(selectedlist);
-  };
+  //setState
+  useEffect(() => setState(), [zu_ToggleEdit]);
+  //resetState
+  useEffect(() => resetState(), [zu_ToggleResetState]);
 
   const columns = [
     {
@@ -147,44 +128,85 @@ function AppProduct() {
     </div>
   );
 
+  //setFromAddEdit //AddData
+  useEffect(() => {
+    if (zu_Title_Form_AddEdit === "add") {
+      /* if (zu_SelectedList.length === 0) { */
+      console.log("Add...");
+      const uuidDataID = uuidv4();
+      const urladd =
+        "https://theothai.com/ttw_webreport/API/api/product/create.php";
+      const optionadd = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: productID === "" ? "" : uuidDataID,
+          ProductID: productID,
+          ProductName: productName,
+          Price: price,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(uuidDataID, productID);
+      zuSetFromAddEdit(addedit);
+      zuSetAdd(urladd, optionadd);
+      console.log(urladd, optionadd);
+    } else {
+      console.log("Edit...");
+      const urledit =
+        "https://theothai.com/ttw_webreport/API/api/product/update.php";
+      const optionedit = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: dataID,
+          ProductID: productID,
+          ProductName: productName,
+          Price: price,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(dataID, productID);
+      zuSetFromAddEdit(addedit);
+      zuSetEdit(urledit, optionedit);
+      console.log(urledit, optionedit);
+    }
+  }, [productID, productName, price, flagCancel]);
+
+  //Load Data รอบแรก
   useEffect(() => {
     zuResetData();
-    const url =
-      "https://theotesteng.000webhostapp.com/API/api/product/read.php";
-    const option = {
+    const urlread =
+      "https://theothai.com/ttw_webreport/API/api/product/read.php";
+    const optionread = {
       method: "GET",
+      headers: {
+        //"API-KEY": "857F7237C03246028748D51C97D4BADE",
+      },
     };
-    zuFetch(url, option);
+    zuSetFetch(urlread, optionread);
+    zuSetColumns(columns);
+    zuSetTitle("สินค้า");
+    zuFetch();
   }, []);
+
+  //setDel
+  useEffect(() => {
+    if (zu_SelectedList.length === 0) {
+      return;
+    }
+    const urldel =
+      "https://theothai.com/ttw_webreport/API/api/product/delete.php";
+    const optiondel = {
+      method: "POST",
+      body: JSON.stringify({
+        DataID: zu_SelectedList.DataID ? zu_SelectedList.DataID : "",
+      }),
+    };
+    zuSetDel(urldel, optiondel);
+  }, [zu_SelectedList]);
   return (
     <div>
       <AppNavber />
-      <AppFetch
-        sortField={"ProductName"}
-        title={"สินค้า"}
-        fetchDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/product/read.php"
-        }
-        delDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/product/delete.php"
-        }
-        addDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/product/create.php"
-        }
-        editDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/product/update.php"
-        }
-        fetchDataBody={fetchDataBody}
-        delDataBody={delDataBody}
-        addDataBody={productID === "" ? null : addDataBody}
-        editDataBody={editDataBody}
-        columns={columns}
-        minWidth={"10rem"}
-        selectedlistOut={upDatedataID}
-        child={addedit}
-        resetState={resetState}
-        setState={setState}
-      />
+      <AppFetch sortField={"ProductName"} minWidth={"10rem"} />
     </div>
   );
 }

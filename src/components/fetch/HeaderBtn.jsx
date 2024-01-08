@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Button } from "primereact/button";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { confirmDialog } from "primereact/confirmdialog";
@@ -6,136 +6,32 @@ import { Toast } from "primereact/toast";
 import { Menu } from "primereact/menu";
 import "primeicons/primeicons.css";
 import AddData from "../AddData";
-import delData from "./DelData";
-import addData from "./AddData";
-import editData from "./EditData";
 import AppSearch from "./AppSearch";
 
 import { useStore } from "../../zustand/Store";
 
-const header = (
-  title,
-  child,
-  selectedlist,
-  delDataURL,
-  delDataBody,
-  setSelectedlist,
-  fetchdata,
-  dt,
-  Datas,
-  columns,
-  addDataURL,
-  addDataBody,
-  editDataURL,
-  editDataBody,
-  resetState,
-  setState,
-  onSearchFiltersChange
-) => {
-  const { zu_SelectedList, zu_Url_Del, zu_Option_Del } = useStore();
+const header = (dt, onSearchFiltersChange) => {
+  const {
+    zu_SelectedList,
+    zu_Url_Del,
+    zu_Option_Del,
+    zu_Columns,
+    zu_Data,
+    zu_Title,
+  } = useStore();
   const {
     zuDelData,
     zuEditData,
     zuToggleResetState,
     zuToggleEdit,
     zuSetTitleFromAddEdit,
+    zuToggleVisible,
   } = useStore();
 
   //console.log("zu_Url,zu_Option: ", zu_Url_Del, zu_Option_Del);
-
-  const [visibleAdd, setVisibleAdd] = useState(false);
-  const [visibleEdit, setVisibleEdit] = useState(false);
   const menuLeft = useRef(null);
   const toast = useRef(null);
   //console.log(setSelectedlist);
-
-  //บันทึกข้อมูล
-  /*   const add = async () => {
-    if (addDataBody === null) {
-      toast.current.show({
-        severity: "warn",
-        summary: "แจ้งเตือน",
-        detail: "ข้อมูลไม่ถูกต้อง",
-        life: 3000,
-      });
-      return;
-    }
-    try {
-      const data = await addData(addDataURL, addDataBody, fetchdata);
-      //console.log("typeof fetchdata : ", typeof fetchdata);
-
-      if (data) {
-        await toast.current.show({
-          severity: "info",
-          summary: "แจ้งเตือน",
-          detail: "เพิ่มข้อมูลเรียบร้อย",
-          life: 3000,
-        });
-
-        resetState();
-      } else {
-        await toast.current.show({
-          severity: "warn",
-          summary: "แจ้งเตือน",
-          detail: "ข้อมูลไม่ถูกต้อง",
-          life: 3000,
-        });
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-      throw error; // ให้เรียก throw error เพื่อให้ catch ใน caller จัดการ
-    }
-  }; */
-
-  //แก้ไข
-  /*   const edit = async () => {
-    try {
-      const data = await zuEditData(
-        editDataURL,
-        editDataBody,
-        setSelectedlist,
-        fetchdata,
-        selectedlist
-      );
-      console.log("data:data", data);
-      if (data) {
-        await toast.current.show({
-          severity: "info",
-          summary: "แจ้งเตือน",
-          detail: "แก้ไขข้อมูลเรียบร้อย",
-          life: 3000,
-        });
-        resetState();
-        setVisibleEdit(false);
-      } else {
-        await toast.current.show({
-          severity: "warn",
-          summary: "แจ้งเตือน",
-          detail: "ข้อมูลไม่ถูกต้อง",
-          life: 3000,
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting data:", error);
-      throw error; // ให้เรียก throw error เพื่อให้ catch ใน caller จัดการ
-    }
-  }; */
-
-  //ลบข้อมูล
-  /*   const del = async () => {
-    try {
-      return await delData(
-        delDataURL,
-        delDataBody,
-        setSelectedlist,
-        fetchdata,
-        selectedlist
-      );
-    } catch (error) {
-      console.error("Error deleting data:", error);
-      throw error; // ให้เรียก throw error เพื่อให้ catch ใน caller จัดการ
-    }
-  }; */
 
   const accept = async () => {
     try {
@@ -185,11 +81,11 @@ const header = (
       return;
     }
     confirmDialog({
-      message: "Do you want to delete this record?",
-      header: "Delete Confirmation",
+      message: "ยืนยันการลบข้อมูล",
+      header: "แจ้งเตือน !!!",
       icon: "pi pi-info-circle",
-      acceptClassName: "bg-red-700 hover:bg-red-800",
-      rejectClassName: "",
+      acceptClassName: "",
+      rejectClassName: "bg-red-700 hover:bg-red-800",
       accept,
       reject,
     });
@@ -205,30 +101,32 @@ const header = (
       import("jspdf-autotable").then(() => {
         const doc = new jsPDF.default(0, 0);
 
-        doc.autoTable(exportColumns, Datas);
+        doc.autoTable(exportColumns, zu_Data);
         doc.save("weightDatas.pdf");
       });
     });
   };
 
-  const exportColumns = columns.map((col) => ({
+  const exportColumns = zu_Columns.map((col) => ({
     title: col.header,
     dataKey: col.field,
   }));
 
   //visible Dialog Add/Edit
   const handleClickAdd = () => {
+    zuSetTitleFromAddEdit("add");
     zuToggleResetState();
-    if (!visibleAdd) {
-      zuSetTitleFromAddEdit("add");
+    zuToggleVisible();
+    /*     if (!visibleAdd) {
       setVisibleAdd(true);
     } else {
       setVisibleAdd(false);
-    }
+    } */
   };
 
   const handleClickEdit = () => {
-    //console.log(zu_SelectedList.length);
+    zuSetTitleFromAddEdit("edit");
+
     if (zu_SelectedList.length === 0) {
       console.log("ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข");
       toast.current.show({
@@ -238,16 +136,30 @@ const header = (
         life: 3000,
       });
       return;
+    } else {
+      zuToggleEdit();
+      zuToggleVisible();
     }
 
-    if (!visibleEdit) {
+    /*     if (!visibleEdit) {
+      if (zu_SelectedList.length === 0) {
+        console.log("ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข");
+        toast.current.show({
+          severity: "warn",
+          summary: "แจ้งเตือน",
+          detail: "ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข",
+          life: 3000,
+        });
+        return;
+      }
+
       //console.log(zu_SelectedList.length);
-      zuSetTitleFromAddEdit("edit");
-      setVisibleEdit(true);
       zuToggleEdit();
+      setVisibleEdit(true);
     } else {
       setVisibleEdit(false);
-    }
+      zuToggleResetState();
+    } */
   };
 
   const menu = useRef(null);
@@ -300,7 +212,7 @@ const header = (
 
         <div className="flex sm:hidden self-start">
           <Menu
-            model={title !== "รายงานชั่ง" ? menuItems1 : menuItems2}
+            model={zu_Title !== "รายงานชั่ง" ? menuItems1 : menuItems2}
             popup
             ref={menuLeft}
             id="popup_menu_left"
@@ -315,9 +227,9 @@ const header = (
           />
         </div>
 
-        {title !== "รายงานชั่ง" && (
+        {zu_Title !== "รายงานชั่ง" && (
           <div className="sm:flex hidden sm:flex-row flex-col gap-2">
-            {title !== "ข้อมูลชั่งน้ำหนัก" && (
+            {zu_Title !== "ข้อมูลชั่งน้ำหนัก" && (
               <Button
                 className=" p-2 w-24 h-10"
                 label="Add"
@@ -325,26 +237,13 @@ const header = (
                 onClick={handleClickAdd}
               />
             )}
-            <AddData
-              VisibleIn={visibleAdd}
-              VisibleOut={handleClickAdd}
-              //SaveOut={add}
-              //child={child}
-              title={"เพิ่มข้อมูล"}
-            />
+            <AddData />
 
             <Button
               className=" p-2 w-24 h-10"
               label="Edit"
               icon="pi pi-pencil"
               onClick={handleClickEdit}
-            />
-            <AddData
-              VisibleIn={visibleEdit}
-              VisibleOut={handleClickEdit}
-              //SaveOut={edit}
-              //child={child}
-              title={"แก้ไข"}
             />
 
             <Button
@@ -379,7 +278,7 @@ const header = (
           />
         </div>
       </div>
-      {title === "รายงานชั่ง" ? (
+      {zu_Title === "รายงานชั่ง" ? (
         <AppSearch onSearchFiltersChange={onSearchFiltersChange} />
       ) : null}
     </>

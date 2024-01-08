@@ -4,15 +4,30 @@ import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
 
 import { InputText } from "primereact/inputtext";
-import { InputNumber } from "primereact/inputnumber";
 import { Checkbox } from "primereact/checkbox";
-import { storeForm, storeOption, storeURL } from "../../recoilStore/Store";
-import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { useStore } from "../../zustand/Store";
 
 function AppCustomer() {
-  const { zu_Data, zuFetch, zuResetData } = useStore();
+  const {
+    zu_Data,
+    zu_SelectedList,
+    zu_ToggleResetState,
+    zu_ToggleEdit,
+    zu_Title_Form_AddEdit,
+  } = useStore();
+  const {
+    zuFetch,
+    zuSetFetch,
+    zuSetAdd,
+    zuResetData,
+    zuSetDel,
+    zuSetFromAddEdit,
+    zuSetDataID,
+    zuSetEdit,
+    zuSetColumns,
+    zuSetTitle,
+  } = useStore();
 
   const [data, setData] = useState("");
   const [dataID, setDataID] = useState("");
@@ -22,51 +37,7 @@ function AppCustomer() {
   const [address2, setAddress2] = useState("");
   const [flagCancel, setFlagCancel] = useState(false);
 
-  const setForm = useSetRecoilState(storeForm);
-  const setUrl = useSetRecoilState(storeURL);
-  const setOption = useSetRecoilState(storeOption);
 
-  const fetchDataBody = {
-    method: "GET",
-    //mode: "cors",
-    headers: {
-      //"Api-Key": "857F7237C03246028748D51C97D4BADE", // กำหนด API key ของคุณ
-      //ABC: "857F7237C03246028748D51C97D4BADE",
-      //X_api_key: "857F7237C03246028748D51C97D4BADE",
-      //Authorization: "Bearer 857F7237C03246028748D51C97D4BAD",
-      //'Origin': 'http://localhost:5173/',
-    },
-  };
-  const delDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: data.DataID || "",
-    }),
-  };
-
-  const addDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: uuidv4(),
-      CustomerID: customerID,
-      CustomerName: customerName,
-      Address1: address1,
-      Address2: address2,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
-
-  const editDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: dataID,
-      CustomerID: customerID,
-      CustomerName: customerName,
-      Address1: address1,
-      Address2: address2,
-      FlagCancel: flagCancel ? "Y" : "N",
-    }),
-  };
 
   const resetState = () => {
     setDataID("");
@@ -78,18 +49,19 @@ function AppCustomer() {
   };
 
   const setState = () => {
-    setDataID(data.DataID);
-    setCustomerID(data.CustomerID);
-    setCustomerName(data.CustomerName);
-    setAddress1(data.Address1);
-    setAddress2(data.Address2);
-    setFlagCancel(data.FlagCancel === "Y" ? true : false);
+    setDataID(zu_SelectedList.DataID);
+    setCustomerID(zu_SelectedList.CustomerID);
+    setCustomerName(zu_SelectedList.CustomerName);
+    setAddress1(zu_SelectedList.Address1);
+    setAddress2(zu_SelectedList.Address2);
+    setFlagCancel(zu_SelectedList.FlagCancel === "Y" ? true : false);
   };
 
-  const upDatedataID = (selectedlist) => {
-    console.log("selectedlist: ", selectedlist);
-    setData(selectedlist);
-  };
+  //setState
+  useEffect(() => setState(), [zu_ToggleEdit]);
+  //resetState
+  useEffect(() => resetState(), [zu_ToggleResetState]);
+
 
   const columns = [
     {
@@ -169,44 +141,87 @@ function AppCustomer() {
     </div>
   );
 
+  //setFromAddEdit //AddData
+  useEffect(() => {
+    if (zu_Title_Form_AddEdit === "add") {
+      /* if (zu_SelectedList.length === 0) { */
+      console.log("Add...");
+      const uuidDataID = uuidv4();
+      const urladd =
+        "https://theothai.com/ttw_webreport/API/api/customer/create.php";
+      const optionadd = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: customerID === "" ? "" : uuidDataID,
+          CustomerID: customerID,
+          CustomerName: customerName,
+          Address1: address1,
+          Address2: address2,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(uuidDataID, customerID);
+      zuSetFromAddEdit(addedit);
+      zuSetAdd(urladd, optionadd);
+      console.log(urladd, optionadd);
+    } else {
+      console.log("Edit...");
+      const urledit =
+        "https://theothai.com/ttw_webreport/API/api/customer/update.php";
+      const optionedit = {
+        method: "POST",
+        body: JSON.stringify({
+          DataID: dataID,
+          CustomerID: customerID,
+          CustomerName: customerName,
+          Address1: address1,
+          Address2: address2,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
+      };
+      zuSetDataID(dataID, customerID);
+      zuSetFromAddEdit(addedit);
+      zuSetEdit(urledit, optionedit);
+      console.log(urledit, optionedit);
+    }
+  }, [customerID, customerName, address1, address2, flagCancel]);
+
+  //Load Data รอบแรก
   useEffect(() => {
     zuResetData();
-    const url =
-      "https://theotesteng.000webhostapp.com/API/api/customer/read.php";
-    const option = {
+    const urlread =
+      "https://theothai.com/ttw_webreport/API/api/customer/read.php";
+    const optionread = {
       method: "GET",
+      headers: {
+        "API-KEY": "857F7237C03246028748D51C97D4BADE",
+      },
     };
-    zuFetch(url, option);
+    zuSetFetch(urlread, optionread);
+    zuSetColumns(columns);
+    zuSetTitle("ลูกค้า");
+    zuFetch();
   }, []);
+
+  //setDel
+  useEffect(() => {
+    if (zu_SelectedList.length === 0) {
+      return;
+    }
+    const urldel =
+      "https://theothai.com/ttw_webreport/API/api/customer/delete.php";
+    const optiondel = {
+      method: "POST",
+      body: JSON.stringify({
+        DataID: zu_SelectedList.DataID ? zu_SelectedList.DataID : "",
+      }),
+    };
+    zuSetDel(urldel, optiondel);
+  }, [zu_SelectedList]);
   return (
     <div>
       <AppNavber />
-      <AppFetch
-        sortField={"CustomerName"}
-        title={"ลูกค้า"}
-        fetchDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/customer/read.php"
-        }
-        delDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/customer/delete.php"
-        }
-        addDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/customer/create.php"
-        }
-        editDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/customer/update.php"
-        }
-        fetchDataBody={fetchDataBody}
-        delDataBody={delDataBody}
-        addDataBody={customerID === "" ? null : addDataBody}
-        editDataBody={editDataBody}
-        columns={columns}
-        minWidth={"10rem"}
-        selectedlistOut={upDatedataID}
-        child={addedit}
-        resetState={resetState}
-        setState={setState}
-      />
+      <AppFetch sortField={"CustomerName"} minWidth={"10rem"} />
     </div>
   );
 }
