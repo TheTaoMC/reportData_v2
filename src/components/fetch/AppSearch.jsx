@@ -21,6 +21,17 @@ function AppSearch({ onSearchFiltersChange }) {
     zuSetSearchFilters,
     zuToggleSearch,
   } = useStore();
+
+  const {
+    zu_MasterCustomers,
+    zu_MasterProducts,
+    zu_MasterWeighttypes,
+    zu_MasterDrivers,
+    zu_MasterTransporters,
+  } = useStore();
+
+  //console.log("zu_MasterCustomers: ", zu_MasterCustomers);
+
   const [dataCustomers, setDataCustomers] = useState([]);
   const [dataProducts, setDataProducts] = useState([]);
   const [dataWeighttypes, setDataWeighttypes] = useState([]);
@@ -201,34 +212,37 @@ function AppSearch({ onSearchFiltersChange }) {
 
   //load Data
   useEffect(() => {
-    fetchDataAndSetState();
+    //fetchDataAndSetState();
   }, []);
+
   useEffect(() => {
     setDataCustomers(
-      dataCustomers.sort((a, b) => a.CustomerID.localeCompare(b.CustomerID))
+      zu_MasterCustomers.sort((a, b) =>
+        a.CustomerID.localeCompare(b.CustomerID)
+      )
     );
     setDataProducts(
-      dataProducts.sort((a, b) => a.ProductID.localeCompare(b.ProductID))
+      zu_MasterProducts.sort((a, b) => a.ProductID.localeCompare(b.ProductID))
     );
     setDataWeighttypes(
-      dataWeighttypes.sort((a, b) =>
+      zu_MasterWeighttypes.sort((a, b) =>
         a.WeightTypeID.localeCompare(b.WeightTypeID)
       )
     );
     setDataDrivers(
-      dataDrivers.sort((a, b) => a.DriverID.localeCompare(b.DriverID))
+      zu_MasterDrivers.sort((a, b) => a.DriverID.localeCompare(b.DriverID))
     );
     setDataTransporters(
-      dataTransporters.sort((a, b) =>
+      zu_MasterTransporters.sort((a, b) =>
         a.TransporterID.localeCompare(b.TransporterID)
       )
     );
   }, [
-    dataCustomers,
-    dataProducts,
-    dataWeighttypes,
-    dataDrivers,
-    dataTransporters,
+    zu_MasterCustomers,
+    zu_MasterProducts,
+    zu_MasterWeighttypes,
+    zu_MasterDrivers,
+    zu_MasterTransporters,
   ]);
 
   //filterKey คือตัวเลข
@@ -467,7 +481,7 @@ function AppSearch({ onSearchFiltersChange }) {
 
   const handleSearch = () => {
     //onSearchFiltersChange(filters2);
-    //zuSetSearchFilters(filters2);
+    zuSetSearchFilters(filters2);
     zuToggleSearch();
   };
   return (

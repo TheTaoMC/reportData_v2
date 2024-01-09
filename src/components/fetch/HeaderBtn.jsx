@@ -278,7 +278,7 @@ const header = (dt, onSearchFiltersChange) => {
           />
         </div>
       </div>
-      {zu_Title === "รายงานชั่ง" ? (
+      {zu_Title === "รายงานชั่ง" || zu_Title === "ข้อมูลชั่งน้ำหนัก" ? (
         <AppSearch onSearchFiltersChange={onSearchFiltersChange} />
       ) : null}
     </>

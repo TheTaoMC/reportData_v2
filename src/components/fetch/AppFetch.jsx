@@ -6,7 +6,6 @@ import header from "./HeaderBtn";
 import { useStore } from "../../zustand/Store";
 
 function AppFetch({
-  
   sortField,
   minWidth,
   onSearchFiltersChange,

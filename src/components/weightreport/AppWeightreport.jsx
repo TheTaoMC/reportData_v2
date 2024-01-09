@@ -14,6 +14,7 @@ function AppWeightreport() {
     zu_Title,
     zu_SearchFilters,
     zu_ToggleSearch,
+    zu_ToggleFetchFilter,
   } = useStore();
   const {
     zuFetch,
@@ -26,6 +27,7 @@ function AppWeightreport() {
     zuSetEdit,
     zuSetColumns,
     zuSetTitle,
+    zuToggleFetchFilter,
   } = useStore();
   const [dataID, setDataID] = useState("");
   const [bodySearch, setBodySearch] = useState([
@@ -144,7 +146,6 @@ function AppWeightreport() {
     },
   ]);
 
-  console.log(zu_SearchFilters);
   /*   const fetchDataBody2 = () => {
     const result = bodySearch.map((e, i) => {
       return {
@@ -219,92 +220,37 @@ function AppWeightreport() {
       WeightDateInFilter: bodySearch[2].Filter,
       WeightDateInFrom: bodySearch[2].From,
       WeightDateInTo: bodySearch[2].To, */
-      WeightDateOutFilter: bodySearch[3].Filter,
-      WeightDateOutFrom: bodySearch[3].From,
-      WeightDateOutTo: bodySearch[3].To,
+      WeightDateOutFilter: zu_SearchFilters[3].Filter,
+      WeightDateOutFrom: zu_SearchFilters[3].From,
+      WeightDateOutTo: zu_SearchFilters[3].To,
       /*       SequenceWeightInFilter: bodySearch[4].Filter,
       SequenceWeightInFrom: bodySearch[4].From,
       SequenceWeightInTo: bodySearch[4].To,
       SequenceWeightOutFilter: bodySearch[5].Filter,
       SequenceWeightOutFrom: bodySearch[5].From,
       SequenceWeightOutTo: bodySearch[5].To, */
-      CarRegisterFilter: bodySearch[6].Filter,
-      CarRegisterTo: bodySearch[6].From,
-      CarRegisterFrom: bodySearch[6].To,
+      CarRegisterFilter: zu_SearchFilters[6].Filter,
+      CarRegisterFrom: zu_SearchFilters[6].From,
+      CarRegisterTo: zu_SearchFilters[6].To,
       /*       WeightTypeIDFilter: bodySearch[7].Filter,
-      WeightTypeIDFrom: bodySearch[7].To,
+      WeightTypeIDFrom: bodySearch[7].From,
       WeightTypeIDTo: bodySearch[7].To,
       CustomerIDFilter: bodySearch[8].Filter,
-      CustomerIDFrom: bodySearch[8].To,
+      CustomerIDFrom: bodySearch[8].From,
       customerIDTo: bodySearch[8].To,
       ProductIDFilter: bodySearch[9].Filter,
-      ProductIDFrom: bodySearch[9].To,
+      ProductIDFrom: bodySearch[9].From,
       ProductIDTo: bodySearch[9].To,
       TransporterIDFilter: bodySearch[10].Filter,
-      TransporterIDFrom: bodySearch[10].To,
+      TransporterIDFrom: bodySearch[10].From,
       TransporterTo: bodySearch[10].To,
       DriverIDFilter: bodySearch[11].Filter,
-      DriverIDFrom: bodySearch[11].To,
+      DriverIDFrom: bodySearch[11].From,
       DriverIDTo: bodySearch[11].To, */
       //FlagCancelFilter: bodySearch[12].Filter ? "Y" : "N",
       //FlagStatusFilter: bodySearch[13].Filter ? "Y" : "N",
     }),
   };
-
-  const funOption = () => {
-    const option = {
-      method: "POST",
-      body: JSON.stringify({
-        /*       WeightScaleIDInFilter: bodySearch[0].Filter,
-        WeightScaleIDInFrom: bodySearch[0].From,
-        WeightScaleIDInTo: bodySearch[0].To,
-        WeightScaleIDOutFilter: bodySearch[1].Filter,
-        WeightScaleIDOutFrom: bodySearch[1].From,
-        WeightScaleIDOutTo: bodySearch[1].To,
-        WeightDateInFilter: bodySearch[2].Filter,
-        WeightDateInFrom: bodySearch[2].From,
-        WeightDateInTo: bodySearch[2].To, */
-        WeightDateOutFilter: zu_SearchFilters[3].Filter,
-        WeightDateOutFrom: zu_SearchFilters[3].From,
-        WeightDateOutTo: zu_SearchFilters[3].To,
-        /*       SequenceWeightInFilter: bodySearch[4].Filter,
-        SequenceWeightInFrom: bodySearch[4].From,
-        SequenceWeightInTo: bodySearch[4].To,
-        SequenceWeightOutFilter: bodySearch[5].Filter,
-        SequenceWeightOutFrom: bodySearch[5].From,
-        SequenceWeightOutTo: bodySearch[5].To, */
-        CarRegisterFilter: zu_SearchFilters[6].Filter,
-        CarRegisterTo: zu_SearchFilters[6].From,
-        CarRegisterFrom: zu_SearchFilters[6].To,
-        /*       WeightTypeIDFilter: bodySearch[7].Filter,
-        WeightTypeIDFrom: bodySearch[7].To,
-        WeightTypeIDTo: bodySearch[7].To,
-        CustomerIDFilter: bodySearch[8].Filter,
-        CustomerIDFrom: bodySearch[8].To,
-        customerIDTo: bodySearch[8].To,
-        ProductIDFilter: bodySearch[9].Filter,
-        ProductIDFrom: bodySearch[9].To,
-        ProductIDTo: bodySearch[9].To,
-        TransporterIDFilter: bodySearch[10].Filter,
-        TransporterIDFrom: bodySearch[10].To,
-        TransporterTo: bodySearch[10].To,
-        DriverIDFilter: bodySearch[11].Filter,
-        DriverIDFrom: bodySearch[11].To,
-        DriverIDTo: bodySearch[11].To, */
-        //FlagCancelFilter: bodySearch[12].Filter ? "Y" : "N",
-        //FlagStatusFilter: bodySearch[13].Filter ? "Y" : "N",
-      }),
-    };
-    return option;
-  };
-
-  useEffect(() => {
-    if (zu_SearchFilters.length === 0) {
-      return;
-    }
-    const option = funOption();
-    console.log("0000", option);
-  }, [zu_SearchFilters]);
 
   /*   const fetchDataBody1 = {
     method: "POST",
@@ -411,50 +357,16 @@ function AppWeightreport() {
     setBodySearch(filters);
   }; */
 
-  //setFromAddEdit //AddData
-  useEffect(() => {
-    if (zu_Title_Form_AddEdit === "add") {
-      /* if (zu_SelectedList.length === 0) { */
-      console.log("Add...");
-      const uuidDataID = uuidv4();
-      const urladd =
-        "https://theothai.com/ttw_webreport/API/api/weightreport/create.php";
-      const optionadd = {
-        method: "POST",
-        body: JSON.stringify({
-          /*           DataID: driverID === "" ? "" : uuidDataID,
-          DriverID: driverID,
-          DriverName: driverName,
-          Address1: address1,
-          Address2: address2,
-          FlagCancel: flagCancel ? "Y" : "N", */
-        }),
-      };
-      //zuSetDataID(uuidDataID, driverID);
-      //zuSetFromAddEdit(addedit);
-      zuSetAdd(urladd, optionadd);
-      console.log(urladd, optionadd);
-    } else {
-      console.log("Edit...");
-      const urledit =
-        "https://theothai.com/ttw_webreport/API/api/weightreport/update.php";
-      const optionedit = {
-        method: "POST",
-        body: JSON.stringify({
-          /*           DataID: dataID,
-          DriverID: driverID,
-          DriverName: driverName,
-          Address1: address1,
-          Address2: address2,
-          FlagCancel: flagCancel ? "Y" : "N", */
-        }),
-      };
-      //zuSetDataID(dataID, driverID);
-      //zuSetFromAddEdit(addedit);
-      zuSetEdit(urledit, optionedit);
-      console.log(urledit, optionedit);
+  console.log(zu_SearchFilters);
+  //console.log(bodySearch);
+  /*   useEffect(() => {
+    if (zu_SearchFilters.length === 0) {
+      return;
     }
-  }, []);
+    setBodySearch(zu_SearchFilters);
+    zuToggleFetchFilter();
+    console.log("setBodySearch(zu_SearchFilters)");
+  }, [zu_SearchFilters]); */
 
   //Load Data รอบแรก
   useEffect(() => {
@@ -468,22 +380,14 @@ function AppWeightreport() {
     zuFetch();
   }, []);
 
-  //setDel
+  //Load Data 2
   useEffect(() => {
-    if (zu_SelectedList.length === 0) {
-      return;
-    }
-    const urldel =
-      "https://theothai.com/ttw_webreport/API/api/weightreport/delete.php";
-    const optiondel = {
-      method: "POST",
-      body: JSON.stringify({
-        DataID: zu_SelectedList.DataID ? zu_SelectedList.DataID : "",
-      }),
-    };
-    zuSetDel(urldel, optiondel);
-  }, [zu_SelectedList]);
-
+    const urlread =
+      "https://theothai.com/ttw_webreport/API/api/weightreport/read.php";
+    const optionread = option;
+    zuSetFetch(urlread, optionread);
+    zuFetch();
+  }, [zu_ToggleSearch]);
   return (
     <div>
       <AppNavber />
