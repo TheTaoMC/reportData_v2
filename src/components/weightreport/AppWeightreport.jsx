@@ -29,7 +29,7 @@ function AppWeightreport() {
     zuSetTitle,
     zuToggleFetchFilter,
   } = useStore();
-  const [dataID, setDataID] = useState("");
+/*   const [dataID, setDataID] = useState("");
   const [bodySearch, setBodySearch] = useState([
     {
       Title: "เครื่องชั่งขาเข้า",
@@ -49,7 +49,6 @@ function AppWeightreport() {
       Title: "เวลาชั่งเข้า",
       Filter: false,
       Typeinput: "calendar",
-
       From: new Date(),
       To: new Date(),
     },
@@ -57,10 +56,8 @@ function AppWeightreport() {
       Title: "เวลาชั่งออก",
       Filter: true,
       Typeinput: "calendar",
-      /*       From: new Date(),
-      To: new Date(), */
-      From: "",
-      To: "",
+      From: new Date(),
+      To: new Date(),
     },
     {
       Title: "เลขที่เข้า",
@@ -144,7 +141,7 @@ function AppWeightreport() {
       From: "",
       To: "",
     },
-  ]);
+  ]); */
 
   /*   const fetchDataBody2 = () => {
     const result = bodySearch.map((e, i) => {
@@ -207,7 +204,7 @@ function AppWeightreport() {
   }; */
 
   //console.log("bodySearch: ", bodySearch[0].Filter);
-  //console.log('zu_SearchFilters: ',zu_SearchFilters);
+  console.log('zu_SearchFilters: ',zu_SearchFilters);
   const option = {
     method: "POST",
     body: JSON.stringify({
@@ -357,7 +354,7 @@ function AppWeightreport() {
     setBodySearch(filters);
   }; */
 
-  console.log(zu_SearchFilters);
+  //console.log(zu_SearchFilters);
   //console.log(bodySearch);
   /*   useEffect(() => {
     if (zu_SearchFilters.length === 0) {

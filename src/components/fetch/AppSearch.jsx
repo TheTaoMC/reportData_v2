@@ -20,9 +20,13 @@ function AppSearch({ onSearchFiltersChange }) {
     zuToggleVisible,
     zuSetSearchFilters,
     zuToggleSearch,
+    zuSetTitle,
+    zuSetSearchFiltersCheckbox,
+    zuSetSearchFiltersTextbox,
   } = useStore();
 
   const {
+    zu_SearchFilters,
     zu_MasterCustomers,
     zu_MasterProducts,
     zu_MasterWeighttypes,
@@ -83,7 +87,7 @@ function AppSearch({ onSearchFiltersChange }) {
     },
     {
       Title: "เวลาชั่งออก",
-      Filter: true,
+      Filter: false,
       Typeinput: "calendar",
       From: new Date(),
       To: new Date(),
@@ -172,7 +176,7 @@ function AppSearch({ onSearchFiltersChange }) {
     },
   ]);
 
-  const fetchDataAndSetState = async () => {
+  /*   const fetchDataAndSetState = async () => {
     try {
       await fetchData(
         "https://theothai.com/ttw_webreport/API/api/customer/read.php",
@@ -208,12 +212,12 @@ function AppSearch({ onSearchFiltersChange }) {
       console.error("Error fetching data:", error);
       throw error;
     }
-  };
+  }; */
 
   //load Data
-  useEffect(() => {
+  /*   useEffect(() => {
     //fetchDataAndSetState();
-  }, []);
+  }, []); */
 
   useEffect(() => {
     setDataCustomers(
@@ -247,9 +251,9 @@ function AppSearch({ onSearchFiltersChange }) {
 
   //filterKey คือตัวเลข
   const handleCheckbox = (i) => {
-    setFilters2((prevFilters2) => {
+    zuSetSearchFiltersCheckbox((prevZu_SearchFilters) => {
       //console.log("i: ", i);
-      const updatedFilters = [...prevFilters2];
+      const updatedFilters = [...prevZu_SearchFilters];
       //console.log("updatedFilters: ", updatedFilters);
       updatedFilters[i] = {
         ...updatedFilters[i],
@@ -262,8 +266,8 @@ function AppSearch({ onSearchFiltersChange }) {
   const handleText = (index, fromorto, newValue) => {
     console.log("fromorto: ", fromorto, newValue);
     if (fromorto === "From") {
-      setFilters2((prevFilters2) => {
-        const updatedFilters = [...prevFilters2];
+      zuSetSearchFiltersTextbox((prevZu_SearchFilters) => {
+        const updatedFilters = [...prevZu_SearchFilters];
         console.log("updatedFilters: ", updatedFilters);
         updatedFilters[index] = {
           ...updatedFilters[index],
@@ -476,12 +480,14 @@ function AppSearch({ onSearchFiltersChange }) {
   };
 
   useEffect(() => {
-    zuSetSearchFilters(filters2);
-  }, []);
+    //zuSetSearchFilters(filters2);
+    console.log("????????????");
+  }, [filters2]);
 
   const handleSearch = () => {
     //onSearchFiltersChange(filters2);
-    zuSetSearchFilters(filters2);
+    zuSetTitleFromAddEdit("search");
+    //zuSetSearchFilters(filters2);
     zuToggleSearch();
   };
   return (
@@ -499,7 +505,7 @@ function AppSearch({ onSearchFiltersChange }) {
         >
           <div className="">
             <div className="flex flex-col align-items-center">
-              {filters2.map((e, i) => (
+              {zu_SearchFilters.map((e, i) => (
                 // eslint-disable-next-line react/jsx-key
                 <div key={i} className="flex flex-col md:flex-row">
                   <div className="flex">

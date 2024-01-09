@@ -23,6 +23,8 @@ function AppWeight() {
     zu_MasterCustomers,
     zu_MasterWeighttypes,
     zu_MasterProducts,
+    zu_MasterTransporters,
+    zu_MasterDrivers,
   } = useStore();
   const {
     zuFetch,
@@ -59,70 +61,46 @@ function AppWeight() {
   const option = {
     method: "POST",
     body: JSON.stringify({
-      /*       WeightScaleIDInFilter: bodySearch[0].Filter,
-      WeightScaleIDInFrom: bodySearch[0].From,
-      WeightScaleIDInTo: bodySearch[0].To,
-      WeightScaleIDOutFilter: bodySearch[1].Filter,
-      WeightScaleIDOutFrom: bodySearch[1].From,
-      WeightScaleIDOutTo: bodySearch[1].To,
-      WeightDateInFilter: bodySearch[2].Filter,
-      WeightDateInFrom: bodySearch[2].From,
-      WeightDateInTo: bodySearch[2].To, */
+/*       WeightScaleIDInFilter: zu_SearchFilters[0].Filter,
+      WeightScaleIDInFrom: zu_SearchFilters[0].From,
+      WeightScaleIDInTo: zu_SearchFilters[0].To,
+      WeightScaleIDOutFilter: zu_SearchFilters[1].Filter,
+      WeightScaleIDOutFrom: zu_SearchFilters[1].From,
+      WeightScaleIDOutTo: zu_SearchFilters[1].To,
+      WeightDateInFilter: zu_SearchFilters[2].Filter,
+      WeightDateInFrom: zu_SearchFilters[2].From,
+      WeightDateInTo: zu_SearchFilters[2].To,
       WeightDateOutFilter: zu_SearchFilters[3].Filter,
       WeightDateOutFrom: zu_SearchFilters[3].From,
       WeightDateOutTo: zu_SearchFilters[3].To,
-      /*       SequenceWeightInFilter: bodySearch[4].Filter,
-      SequenceWeightInFrom: bodySearch[4].From,
-      SequenceWeightInTo: bodySearch[4].To,
-      SequenceWeightOutFilter: bodySearch[5].Filter,
-      SequenceWeightOutFrom: bodySearch[5].From,
-      SequenceWeightOutTo: bodySearch[5].To, */
+      SequenceWeightInFilter: zu_SearchFilters[4].Filter,
+      SequenceWeightInFrom: zu_SearchFilters[4].From,
+      SequenceWeightInTo: zu_SearchFilters[4].To,
+      SequenceWeightOutFilter: zu_SearchFilters[5].Filter,
+      SequenceWeightOutFrom: zu_SearchFilters[5].From,
+      SequenceWeightOutTo: zu_SearchFilters[5].To, */
       CarRegisterFilter: zu_SearchFilters[6].Filter,
       CarRegisterFrom: zu_SearchFilters[6].From,
       CarRegisterTo: zu_SearchFilters[6].To,
-      /*       WeightTypeIDFilter: bodySearch[7].Filter,
-      WeightTypeIDFrom: bodySearch[7].From,
-      WeightTypeIDTo: bodySearch[7].To,
-      CustomerIDFilter: bodySearch[8].Filter,
-      CustomerIDFrom: bodySearch[8].From,
-      customerIDTo: bodySearch[8].To,
-      ProductIDFilter: bodySearch[9].Filter,
-      ProductIDFrom: bodySearch[9].From,
-      ProductIDTo: bodySearch[9].To,
-      TransporterIDFilter: bodySearch[10].Filter,
-      TransporterIDFrom: bodySearch[10].From,
-      TransporterTo: bodySearch[10].To,
-      DriverIDFilter: bodySearch[11].Filter,
-      DriverIDFrom: bodySearch[11].From,
-      DriverIDTo: bodySearch[11].To, */
+/*       WeightTypeIDFilter: zu_SearchFilters[7].Filter,
+      WeightTypeIDFrom: zu_SearchFilters[7].From,
+      WeightTypeIDTo: zu_SearchFilters[7].To,
+      CustomerIDFilter: zu_SearchFilters[8].Filter,
+      CustomerIDFrom: zu_SearchFilters[8].From,
+      customerIDTo: zu_SearchFilters[8].To,
+      ProductIDFilter: zu_SearchFilters[9].Filter,
+      ProductIDFrom: zu_SearchFilters[9].From,
+      ProductIDTo: zu_SearchFilters[9].To,
+      TransporterIDFilter: zu_SearchFilters[10].Filter,
+      TransporterIDFrom: zu_SearchFilters[10].From,
+      TransporterTo: zu_SearchFilters[10].To,
+      DriverIDFilter: zu_SearchFilters[11].Filter,
+      DriverIDFrom: zu_SearchFilters[11].From,
+      DriverIDTo: zu_SearchFilters[11].To, */
       //FlagCancelFilter: bodySearch[12].Filter ? "Y" : "N",
       //FlagStatusFilter: bodySearch[13].Filter ? "Y" : "N",
     }),
   };
-
-  console.log("weightType ", weightType);
-  console.log("zu_SelectedList ", zu_SelectedList);
-  /*   const delDataBody = {
-    method: "POST",
-    body: JSON.stringify({
-      DataID: dataID.DataID,
-    }),
-  }; */
-
-  console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
-
-
-
-/*   useEffect(() => {
-
-    const foundData = zu_MasterWeighttypes.find(
-      (item) => item.DataID === weightType
-    );
-    console.log(
-      "foundData ",
-      foundData !== undefined ? foundData.WeightTypeID : null
-    );
-  }, [weightType]) */
 
   const addedit = (
     <div>
@@ -180,12 +158,10 @@ function AppWeight() {
           autoFocus
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={"P001"}
-          onChange={(e) => {
-            setProduct(e.value);
-          }}
+          value={product}
+          onChange={(e) => setProduct(e.value)}
           options={zu_MasterProducts.map((data) => ({
-            value: data.ProductDataID,
+            value: data.DataID,
             label: data.ProductID + " : " + data.ProductName,
           }))}
           placeholder="Select a Country"
@@ -199,13 +175,11 @@ function AppWeight() {
           autoFocus
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={"P001"}
-          onChange={(e) => {
-            setProduct(e.value);
-          }}
-          options={zu_MasterProducts.map((data) => ({
-            value: data.ProductDataID,
-            label: data.ProductID + " : " + data.ProductName,
+          value={transporter}
+          onChange={(e) => setTransporter(e.value)}
+          options={zu_MasterTransporters.map((data) => ({
+            value: data.DataID,
+            label: data.TransporterID + " : " + data.TransporterName,
           }))}
           placeholder="Select a Country"
           filter
@@ -218,13 +192,11 @@ function AppWeight() {
           autoFocus
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={"P001"}
-          onChange={(e) => {
-            setProduct(e.value);
-          }}
-          options={zu_MasterProducts.map((data) => ({
-            value: data.ProductDataID,
-            label: data.ProductID + " : " + data.ProductName,
+          value={driver}
+          onChange={(e) => setDriver(e.value)}
+          options={zu_MasterDrivers.map((data) => ({
+            value: data.DataID,
+            label: data.DriverID + " : " + data.DriverName,
           }))}
           placeholder="Select a Country"
           filter
@@ -256,7 +228,7 @@ function AppWeight() {
         />
       </div>
       <div className="overflow-x-auto">
-        <table className="w-[100%] table-auto">
+        <table className="w-[100%] table-auto mt-2">
           <thead className="border border-gray-950">
             <tr className="bg-sky-300">
               <th className="w-219 p-2">รายการ</th>
@@ -443,6 +415,8 @@ function AppWeight() {
   };
   //setState
   useEffect(() => setState(), [zu_ToggleEdit]);
+
+  console.log("zu_Title_Form_AddEdit ", zu_Title_Form_AddEdit);
   //setFromAddEdit //AddData
   useEffect(() => {
     if (zu_Title_Form_AddEdit === "add") {
@@ -466,7 +440,8 @@ function AppWeight() {
       zuSetFromAddEdit(addedit);
       zuSetAdd(urladd, optionadd);
       console.log(urladd, optionadd);
-    } else {
+    }
+    if (zu_Title_Form_AddEdit === "edit") {
       console.log("Edit...");
       const urledit =
         "https://theothai.com/ttw_webreport/API/api/weight/update.php";
@@ -492,6 +467,7 @@ function AppWeight() {
     weightType,
     customer,
     product,
+    driver,
     transporter,
     remark1,
     remark2,
@@ -500,26 +476,31 @@ function AppWeight() {
 
   //Load Data 2
   useEffect(() => {
-    //zuResetData();
-    const urlread =
-      "https://theothai.com/ttw_webreport/API/api/weight/read.php";
-    const optionread = option;
-    zuSetFetch(urlread, optionread);
-    zuFetch();
-    console.log("Load Data 2");
+    if (zu_Title_Form_AddEdit === "search") {
+      //zuResetData();
+      const urlread =
+        "https://theothai.com/ttw_webreport/API/api/weightreport/read.php";
+      const optionread = option;
+      zuSetFetch(urlread, optionread);
+      zuFetch();
+      console.log("Load Data 2");
+    }
   }, [zu_ToggleSearch]);
 
   //Load Data รอบแรก
   useEffect(() => {
-    zuResetData();
-    const urlread =
-      "https://theothai.com/ttw_webreport/API/api/weight/read.php";
-    const optionread = option;
-    zuSetFetch(urlread, optionread);
-    zuSetColumns(columns);
-    zuSetTitle("ข้อมูลชั่งน้ำหนัก");
-    zuFetchMaster();
-    zuFetch();
+    if (zu_Title_Form_AddEdit === null) {
+      zuResetData();
+      const urlread =
+        "https://theothai.com/ttw_webreport/API/api/weightreport/read.php";
+      const optionread = option;
+      zuSetFetch(urlread, optionread);
+      zuSetColumns(columns);
+      zuSetTitle("ข้อมูลชั่งน้ำหนัก");
+      zuFetchMaster();
+      zuFetch();
+    }
+
   }, []);
 
   //setDel
