@@ -3,8 +3,7 @@ import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
-import isEqual from "lodash/isEqual";
-import { BlockUI } from "primereact/blockui";
+
 import { useStore } from "../../zustand/Store";
 import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
@@ -40,16 +39,15 @@ function AppWeight() {
     zuSetTitle,
     zuToggleFetchFilter,
     zuFetchMaster,
-    zuSelectedList,
   } = useStore();
 
-  //const [dataID, setDataID] = useState("");
-  /*   const [driverID, setDriverID] = useState(""); */
-  /*   const [driverName, setDriverName] = useState("");
+  const [dataID, setDataID] = useState("");
+  const [driverID, setDriverID] = useState("");
+  const [driverName, setDriverName] = useState("");
   const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState(""); */
+  const [address2, setAddress2] = useState("");
 
-  /*   const [xx, setXx] = useState([]);
+  const [xx,setXx] = useState([]);
   const [carRegister, setCarRegister] = useState("");
   const [weightType, setWeightType] = useState("");
   const [customer, setCustomer] = useState("");
@@ -59,9 +57,8 @@ function AppWeight() {
   const [remark1, setRemark1] = useState("");
   const [remark2, setRemark2] = useState("");
   const [remark3, setRemark3] = useState("");
-  const [flagCancel, setFlagCancel] = useState(false); */
-  console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
-
+  const [flagCancel, setFlagCancel] = useState(false);
+  //console.log("zu_SearchFilters ", zu_SearchFilters);
   const option = {
     method: "POST",
     body: JSON.stringify({
@@ -105,7 +102,7 @@ function AppWeight() {
       //FlagStatusFilter: bodySearch[13].Filter ? "Y" : "N",
     }),
   };
-  console.log("zu_SelectedList ", zu_SelectedList);
+
   const addedit = (
     <div>
       <div>ทะเบียนรถ</div>
@@ -114,7 +111,7 @@ function AppWeight() {
           //autoFocus
           disabled={true}
           className="w-[100%]"
-          value={zu_SelectedList.CarRegister}
+          value={carRegister}
         />
       </div>
       <div>ประเภทชั่ง</div>
@@ -123,22 +120,8 @@ function AppWeight() {
           autoFocus
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={zu_SelectedList.WeightTypeDataID}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const newValue2 =
-              zu_MasterWeighttypes.find((e) => e.DataID === newValue) || {};
-
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              WeightTypeDataID: newValue,
-              WeightTypeID: newValue2.WeightTypeID,
-              WeightTypeName: newValue2.WeightTypeName,
-            };
-            //console.log("e.target.value2 ", newValue2);
-            //console.log("updatedZuSelectedList ", updatedZuSelectedList);
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={weightType}
+          onChange={(e) => setWeightType(e.value)}
           //onChange={(e) => setWeightType(e?.DataID || "")}
           options={zu_MasterWeighttypes.map((data) => ({
             //value0: data.DataID,
@@ -155,22 +138,13 @@ function AppWeight() {
         <Dropdown
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={zu_SelectedList.CustomerDataID}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const newValue2 =
-              zu_MasterCustomers.find((e) => e.DataID === newValue) || {};
-
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              CustomerDataID: newValue,
-              CustomerID: newValue2.CustomerID,
-              CustomerName: newValue2.CustomerName,
-            };
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={
+            zu_MasterCustomers.find((e) => e.DataID === customer)?.CustomerID ||
+            ""
+          }
+          onChange={(e) => setCustomer(e.value)}
           options={zu_MasterCustomers.map((data) => ({
-            value: data.DataID,
+            value: data.CustomerID,
             label: data.CustomerID + " : " + data.CustomerName,
           }))}
           placeholder="Select a Country"
@@ -183,20 +157,8 @@ function AppWeight() {
         <Dropdown
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={zu_SelectedList.ProductDataID}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const newValue2 =
-              zu_MasterProducts.find((e) => e.DataID === newValue) || {};
-
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              ProductDataID: newValue,
-              ProductID: newValue2.ProductID,
-              ProductName: newValue2.ProductName,
-            };
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={product}
+          onChange={(e) => setProduct(e.value)}
           options={zu_MasterProducts.map((data) => ({
             value: data.DataID,
             label: data.ProductID + " : " + data.ProductName,
@@ -211,20 +173,8 @@ function AppWeight() {
         <Dropdown
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={zu_SelectedList.TransporterDataID}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const newValue2 =
-              zu_MasterTransporters.find((e) => e.DataID === newValue) || {};
-
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              TransporterDataID: newValue,
-              TransporterID: newValue2.TransporterID,
-              TransporterName: newValue2.TransporterName,
-            };
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={transporter}
+          onChange={(e) => setTransporter(e.value)}
           options={zu_MasterTransporters.map((data) => ({
             value: data.DataID,
             label: data.TransporterID + " : " + data.TransporterName,
@@ -239,20 +189,8 @@ function AppWeight() {
         <Dropdown
           //disabled={filter ? false : true}
           className="w-[100%]"
-          value={zu_SelectedList.DriverDataID}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const newValue2 =
-              zu_MasterDrivers.find((e) => e.DataID === newValue) || {};
-
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              DriverDataID: newValue,
-              DriverID: newValue2.DriverID,
-              DriverName: newValue2.DriverName,
-            };
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={driver}
+          onChange={(e) => setDriver(e.value)}
           options={zu_MasterDrivers.map((data) => ({
             value: data.DataID,
             label: data.DriverID + " : " + data.DriverName,
@@ -266,45 +204,24 @@ function AppWeight() {
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark1}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              Remark1: newValue,
-            };
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={remark1}
+          onChange={(e) => setRemark1(e.target.value)}
         />
       </div>
       <div>หมายเหตุ 2</div>
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark2}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              Remark2: newValue,
-            };
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={remark2}
+          onChange={(e) => setRemark2(e.target.value)}
         />
       </div>
       <div>หมายเหตุ 3</div>
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark3}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            const updatedZuSelectedList = {
-              ...zu_SelectedList,
-              Remark3: newValue,
-            };
-            zuSelectedList(updatedZuSelectedList);
-          }}
+          value={remark3}
+          onChange={(e) => setRemark3(e.target.value)}
         />
       </div>
       <div className="overflow-x-auto">
@@ -402,16 +319,8 @@ function AppWeight() {
           <div className="flex gap-2 items-center">
             <div>สถานะ</div>
             <Checkbox
-              onChange={(e) => {
-                const newValue = e.checked;
-                const updatedZuSelectedList = {
-                  ...zu_SelectedList,
-                  FlagCancel: newValue === true ? "Y" : "N",
-                };
-                console.log(newValue);
-                zuSelectedList(updatedZuSelectedList);
-              }}
-              checked={zu_SelectedList.FlagCancel === "N" ? false : true}
+              onChange={(e) => setFlagCancel(e.checked)}
+              checked={flagCancel}
             ></Checkbox>
             <label htmlFor="ingredient1" className="">
               ยกเลิก
@@ -489,9 +398,9 @@ function AppWeight() {
     },
   ];
 
-  console.log("zu_SelectedList ", zu_SelectedList);
+  console.log('zu_SelectedList ',zu_SelectedList);
 
-  /*   const setState = () => {
+  const setState = () => {
     setXx(zu_SelectedList);
     setDataID(zu_SelectedList.DataID);
     setCarRegister(zu_SelectedList.CarRegister);
@@ -502,9 +411,9 @@ function AppWeight() {
     setRemark1(zu_SelectedList.Remark1);
     setRemark2(zu_SelectedList.Remark2);
     setRemark3(zu_SelectedList.Remark3);
-  }; */
+  };
   //setState
-  //useEffect(() => setState(), [zu_ToggleEdit]);
+  useEffect(() => setState(), [zu_ToggleEdit]);
 
   //console.log("zu_Title_Form_AddEdit ", zu_Title_Form_AddEdit);
   //setFromAddEdit //AddData
@@ -537,16 +446,37 @@ function AppWeight() {
         "https://theothai.com/ttw_webreport/API/api/weight/update.php";
       const optionedit = {
         method: "POST",
-        body: JSON.stringify(zu_SelectedList),
+        body: JSON.stringify({
+          DataID: dataID,
+          CarRegister: carRegister,
+          WeightTypeDataID: weightType,
+          CustomerDataID: customer,
+          ProductDataID: product,
+          TransporterDataID: transporter,
+          DriverDataID: driver,
+          Remark1: remark1,
+          Remark2: remark2,
+          Remark3: remark3,
+          FlagCancel: flagCancel ? "Y" : "N",
+        }),
       };
       //const optionedit = option;
-      zuSetDataID(zu_SelectedList.DataID, "");
+      zuSetDataID(dataID, driverID);
       zuSetFromAddEdit(addedit);
       zuSetEdit(urledit, optionedit);
       console.log(urledit, optionedit);
     }
-    zuSetFromAddEdit(addedit);
-  }, [zu_SelectedList]);
+  }, [
+    carRegister,
+    weightType,
+    customer,
+    product,
+    driver,
+    transporter,
+    remark1,
+    remark2,
+    remark3,
+  ]);
 
   //Load Data 2
   useEffect(() => {
@@ -571,9 +501,7 @@ function AppWeight() {
       zuSetFetch(urlread, optionread);
       zuSetColumns(columns);
       zuSetTitle("ข้อมูลชั่งน้ำหนัก");
-
       zuFetchMaster();
-
       zuFetch();
     }
   }, []);
@@ -594,31 +522,8 @@ function AppWeight() {
     zuSetDel(urldel, optiondel);
   }, [zu_SelectedList]);
 
-  const [blocked, setBlocked] = useState(true);
-  useEffect(() => {
-    if (
-      zu_MasterCustomers.length !== "0" &&
-      zu_MasterWeighttypes.length !== "0" &&
-      zu_MasterProducts.length !== "0" &&
-      zu_MasterTransporters.length !== "0" &&
-      zu_MasterDrivers.length !== "0"
-    ) {
-      setTimeout(() => {
-        setBlocked(false);
-      }, 3000);
-    }
-  }, [
-    blocked,
-    zu_MasterCustomers,
-    zu_MasterWeighttypes,
-    zu_MasterProducts,
-    zu_MasterTransporters,
-    zu_MasterDrivers,
-  ]);
-
   return (
     <div>
-      <BlockUI blocked={blocked} fullScreen />
       <AppNavber />
       <AppFetch minWidth={"50rem"} />
     </div>

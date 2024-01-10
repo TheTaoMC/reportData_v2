@@ -251,42 +251,33 @@ function AppSearch({ onSearchFiltersChange }) {
 
   //filterKey คือตัวเลข
   const handleCheckbox = (i) => {
-    zuSetSearchFiltersCheckbox((prevZu_SearchFilters) => {
-      //console.log("i: ", i);
-      const updatedFilters = [...prevZu_SearchFilters];
-      //console.log("updatedFilters: ", updatedFilters);
-      updatedFilters[i] = {
-        ...updatedFilters[i],
-        Filter: !updatedFilters[i].Filter,
-      };
-      return updatedFilters;
-    });
+    const updatedFilters = [...zu_SearchFilters];
+    updatedFilters[i] = {
+      ...updatedFilters[i],
+      Filter: !updatedFilters[i].Filter,
+    };
+
+    // Update the Zustand store with the new filters
+    zuSetSearchFiltersCheckbox(updatedFilters);
   };
 
+  console.log('zu_SearchFilters ',zu_SearchFilters);
   const handleText = (index, fromorto, newValue) => {
-    console.log("fromorto: ", fromorto, newValue);
     if (fromorto === "From") {
-      zuSetSearchFiltersTextbox((prevZu_SearchFilters) => {
-        const updatedFilters = [...prevZu_SearchFilters];
-        console.log("updatedFilters: ", updatedFilters);
-        updatedFilters[index] = {
-          ...updatedFilters[index],
-          From: newValue,
-          //fromorto: !updatedFilters[index].fromorto,
-        };
-        return updatedFilters;
-      });
+
+      const updatedFilters = [...zu_SearchFilters];
+      updatedFilters[index] = {
+        ...updatedFilters[index],
+        From: newValue,
+      };
+      zuSetSearchFiltersTextbox(updatedFilters);
     } else if (fromorto === "To") {
-      setFilters2((prevFilters2) => {
-        const updatedFilters = [...prevFilters2];
-        console.log("updatedFilters: ", updatedFilters);
-        updatedFilters[index] = {
-          ...updatedFilters[index],
-          To: newValue,
-          //fromorto: !updatedFilters[index].fromorto,
-        };
-        return updatedFilters;
-      });
+      const updatedFilters = [...zu_SearchFilters];
+      updatedFilters[index] = {
+        ...updatedFilters[index],
+        To: newValue,
+      };
+      zuSetSearchFiltersTextbox(updatedFilters);
     }
   };
 
@@ -310,7 +301,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <InputText
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={filters2[index].From}
+                value={zu_SearchFilters[index].From}
                 onChange={(e) => handleText(index, fromorto, e.target.value)}
               />
             )}
@@ -319,7 +310,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <InputText
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={filters2[index].To}
+                value={zu_SearchFilters[index].To}
                 onChange={(e) => handleText(index, fromorto, e.target.value)}
               />
             )}
@@ -333,7 +324,7 @@ function AppSearch({ onSearchFiltersChange }) {
                 disabled={filter ? false : true}
                 className="w-[100%]"
                 showTime
-                value={filters2[index].From}
+                value={zu_SearchFilters[index].From}
                 onChange={(e) => handleText(index, fromorto, e.value)}
                 hourFormat="24"
                 dateFormat="dd/mm/yy"
@@ -346,7 +337,7 @@ function AppSearch({ onSearchFiltersChange }) {
                 disabled={filter ? false : true}
                 className="w-[100%]"
                 showTime
-                value={filters2[index].To}
+                value={zu_SearchFilters[index].To}
                 onChange={(e) => handleText(index, fromorto, e.value)}
                 hourFormat="24"
                 dateFormat="dd/mm/yy"
@@ -363,7 +354,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <Dropdown
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={filters2[index].From}
+                value={zu_SearchFilters[index].From}
                 onChange={(e) => handleText(index, fromorto, e.value)}
                 options={
                   tablename === "weighttype"
@@ -403,7 +394,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <Dropdown
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={filters2[index].To}
+                value={zu_SearchFilters[index].To}
                 onChange={(e) => handleText(index, fromorto, e.value)}
                 options={
                   tablename === "weighttype"
@@ -447,7 +438,7 @@ function AppSearch({ onSearchFiltersChange }) {
             {fromorto === "From" && (
               <Dropdown
                 className="min-w-[7rem] max-w-10rem sm:md:ml-[61px]"
-                value={filters2[index].Filter}
+                value={zu_SearchFilters[index].Filter}
                 onChange={(e) => handleCheckbox(index, fromorto, e.value)}
                 options={[
                   { show: "ใช่", value: true },
@@ -479,10 +470,10 @@ function AppSearch({ onSearchFiltersChange }) {
     }
   };
 
-  useEffect(() => {
+  /*   useEffect(() => {
     //zuSetSearchFilters(filters2);
     console.log("????????????");
-  }, [filters2]);
+  }, [filters2]); */
 
   const handleSearch = () => {
     //onSearchFiltersChange(filters2);
