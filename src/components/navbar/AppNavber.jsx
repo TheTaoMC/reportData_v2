@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "primereact/menu";
 import { Button } from "primereact/button";
 import Cookies from "js-cookie";
+import { useStore } from "../../zustand/Store";
 
 function AppNavber({ title }) {
+  const { zuCheckUser } = useStore();
   const navigate = useNavigate();
   const menuData = useRef(null);
   const menuReport = useRef(null);
@@ -41,6 +43,13 @@ function AppNavber({ title }) {
       label: "Transporter",
       command: () => {
         navigate("/Transporter");
+      },
+      //icon: "pi pi-times",
+    },
+    {
+      label: "User",
+      command: () => {
+        navigate("/User");
       },
       //icon: "pi pi-times",
     },
@@ -105,7 +114,10 @@ function AppNavber({ title }) {
               label="Main"
               icon="pi pi-home"
               className="p-2 w-24 h-10"
-              onClick={() => navigate("/main") }
+              onClick={() => {
+                zuCheckUser(() => navigate("/"));
+                navigate("/main");
+              }}
               aria-controls="popup_menu_left"
               aria-haspopup
             />
@@ -143,7 +155,7 @@ function AppNavber({ title }) {
               icon="pi pi-home"
               className="p-2 w-24 h-10"
               onClick={() => {
-                Cookies.remove("user");
+                Cookies.remove("username");
                 navigate("/");
               }}
               aria-controls="popup_menu_left"

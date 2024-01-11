@@ -261,7 +261,7 @@ function AppSearch({ onSearchFiltersChange }) {
     zuSetSearchFiltersCheckbox(updatedFilters);
   };
 
-  console.log('zu_SearchFilters ',zu_SearchFilters);
+  //console.log('zu_SearchFilters ',zu_SearchFilters);
   const handleText = (index, fromorto, newValue) => {
     if (fromorto === "From") {
 

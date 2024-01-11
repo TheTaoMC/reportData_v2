@@ -26,9 +26,9 @@ const AddData = () => {
         return;
       } else {
         toast.current.show({
-          severity: "",
+          severity: "success",
           summary: "แจ้งเตือน",
-          detail: "เพิ่มข้อมูลสำเร็จ]",
+          detail: "เพิ่มข้อมูลสำเร็จ",
           life: 3000,
         });
       }

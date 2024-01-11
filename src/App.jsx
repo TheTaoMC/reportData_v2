@@ -14,6 +14,7 @@ import AppTransporter from "./components/transporter/AppTransporter.jsx";
 import AppLogin from "./components/login/AppLogin.jsx";
 import AppWeightreport from "./components/weightreport/AppWeightreport.jsx";
 import AppMain from "./components/main/AppMain.jsx";
+import AppUser from "./components/user/AppUser.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,12 +58,15 @@ const router = createBrowserRouter([
     element: <AppTransporter />,
   },
   {
+    path: "user",
+    element: <AppUser />,
+  },
+  {
     path: "login",
     element: <AppLogin />,
   },
 ]);
 function App() {
-  
   return (
     <>
       <RouterProvider router={router} />

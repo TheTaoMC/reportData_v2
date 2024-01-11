@@ -232,7 +232,7 @@ const header = (dt, onSearchFiltersChange) => {
     },
   ];
 
-  console.log("menuItems1 ", menuItems1);
+  
   return (
     <>
       <div className="flex sm:flex-row flex-col  sm:align-items-center items-center justify-between gap-2">

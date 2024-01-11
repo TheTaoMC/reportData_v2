@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
 import { v4 as uuidv4 } from "uuid";
@@ -41,8 +42,9 @@ function AppWeight() {
     zuToggleFetchFilter,
     zuFetchMaster,
     zuSelectedList,
+    zuCheckUser,
   } = useStore();
-
+  const navigate = useNavigate();
   //const [dataID, setDataID] = useState("");
   /*   const [driverID, setDriverID] = useState(""); */
   /*   const [driverName, setDriverName] = useState("");
@@ -60,7 +62,7 @@ function AppWeight() {
   const [remark2, setRemark2] = useState("");
   const [remark3, setRemark3] = useState("");
   const [flagCancel, setFlagCancel] = useState(false); */
-  console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
+  //console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
 
   const option = {
     method: "POST",
@@ -105,7 +107,7 @@ function AppWeight() {
       //FlagStatusFilter: bodySearch[13].Filter ? "Y" : "N",
     }),
   };
-  console.log("zu_SelectedList ", zu_SelectedList);
+  //console.log("zu_SelectedList ", zu_SelectedList);
   const addedit = (
     <div>
       <div>ทะเบียนรถ</div>
@@ -436,6 +438,14 @@ function AppWeight() {
       header: "WeightTimeOut",
     },
     {
+      field: "WeightTypeID",
+      header: "WeightTypeID",
+    },
+    {
+      field: "WeightTypeName",
+      header: "WeightTypeName",
+    },
+    {
       field: "CarRegister",
       header: "CarRegister",
     },
@@ -454,6 +464,14 @@ function AppWeight() {
     {
       field: "ProductName",
       header: "ProductName",
+    },
+    {
+      field: "TransporterID",
+      header: "TransporterID",
+    },
+    {
+      field: "TransporterName",
+      header: "TransporterName",
     },
     {
       field: "Remark1",
@@ -489,7 +507,7 @@ function AppWeight() {
     },
   ];
 
-  console.log("zu_SelectedList ", zu_SelectedList);
+  //console.log("zu_SelectedList ", zu_SelectedList);
 
   /*   const setState = () => {
     setXx(zu_SelectedList);
@@ -562,7 +580,20 @@ function AppWeight() {
   }, [zu_ToggleSearch]);
 
   //Load Data รอบแรก
+  const memoizedZuFetchMaster = useMemo(() => {
+    return async () => {
+      const result = await zuFetchMaster();
+      //console.log(result);
+      setBlocked(result === "success" ? false : true);
+    }; // ตัวอย่างเท่านั้น
+  }, [zuFetchMaster]); // Dependencies ที่ถูกใส่ใน useMemo
+
   useEffect(() => {
+    memoizedZuFetchMaster();
+  }, [memoizedZuFetchMaster]);
+
+  useEffect(() => {
+    zuCheckUser(() => navigate("/"));
     if (zu_Title_Form_AddEdit === null) {
       zuResetData();
       const urlread =
@@ -572,8 +603,8 @@ function AppWeight() {
       zuSetColumns(columns);
       zuSetTitle("ข้อมูลชั่งน้ำหนัก");
 
-      zuFetchMaster();
-
+      //zuFetchMaster();
+      //memoizedZuFetchMaster();
       zuFetch();
     }
   }, []);
@@ -596,25 +627,12 @@ function AppWeight() {
 
   const [blocked, setBlocked] = useState(true);
   useEffect(() => {
-    if (
-      zu_MasterCustomers.length !== "0" &&
-      zu_MasterWeighttypes.length !== "0" &&
-      zu_MasterProducts.length !== "0" &&
-      zu_MasterTransporters.length !== "0" &&
-      zu_MasterDrivers.length !== "0"
-    ) {
+    if (!blocked) {
       setTimeout(() => {
         setBlocked(false);
       }, 3000);
     }
-  }, [
-    blocked,
-    zu_MasterCustomers,
-    zu_MasterWeighttypes,
-    zu_MasterProducts,
-    zu_MasterTransporters,
-    zu_MasterDrivers,
-  ]);
+  }, [blocked]);
 
   return (
     <div>

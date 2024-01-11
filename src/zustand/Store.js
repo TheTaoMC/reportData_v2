@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import Cookies from "js-cookie";
 
 export const useStore = create((set, get) => ({
     bears: 0,
@@ -167,92 +168,57 @@ export const useStore = create((set, get) => ({
     zuSetDel: (url, option) => set({ zu_Url_Del: url, zu_Option_Del: option }),
     zuFetchMaster: async () => {
         try {
-            //console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
-            const responseCustomers = await fetch(
-                get().zu_Url_Base + "customer/read.php",
-                {
-                    method: "GET",
-                    headers: {
-                        "API-KEY": "857F7237C03246028748D51C97D4BADE",
-                    },
-                }
-            );
-            const responseProducts = await fetch(
-                get().zu_Url_Base + "product/read.php",
-                {
-                    method: "GET",
-                }
-            );
-            const responseWeighttypes = await fetch(
-                get().zu_Url_Base + "weighttype/read.php",
-                {
-                    method: "GET",
-                }
-            );
-            const responseDrivers = await fetch(
-                get().zu_Url_Base + "driver/read.php",
-                {
-                    method: "GET",
-                }
-            );
-            const responseTransporters = await fetch(
-                get().zu_Url_Base + "transporter/read.php",
-                {
-                    method: "GET",
-                }
-            );
+            const responseCustomers = await fetch(get().zu_Url_Base + "customer/read.php", { method: "GET", headers: { "API-KEY": "857F7237C03246028748D51C97D4BADE" } });
+            const responseProducts = await fetch(get().zu_Url_Base + "product/read.php", { method: "GET" });
+            const responseWeighttypes = await fetch(get().zu_Url_Base + "weighttype/read.php", { method: "GET" });
+            const responseDrivers = await fetch(get().zu_Url_Base + "driver/read.php", { method: "GET" });
+            const responseTransporters = await fetch(get().zu_Url_Base + "transporter/read.php", { method: "GET" });
 
-            if (
-                !responseCustomers.ok ||
-                !responseProducts.ok ||
-                !responseWeighttypes.ok ||
-                !responseDrivers.ok ||
-                !responseTransporters.ok
-            ) {
-                //set({ zu_Data: [] });
-                throw new Error(
-                    `HTTP error! Status: ${(responseCustomers.status,
-                        responseProducts.status,
-                        responseWeighttypes.status,
-                        responseDrivers.status,
-                        responseTransporters.status)
-                    }`
-                );
-            }
+            const successfulResponses = [];
 
             if (responseCustomers.ok) {
                 const data = await responseCustomers.json();
-                //console.log(data);
                 set({ zu_MasterCustomers: data });
+                successfulResponses.push("Customers");
             }
+
             if (responseProducts.ok) {
                 const data = await responseProducts.json();
-                //console.log(data);
                 set({ zu_MasterProducts: data });
+                successfulResponses.push("Products");
             }
+
             if (responseWeighttypes.ok) {
                 const data = await responseWeighttypes.json();
-                //console.log(data);
                 set({ zu_MasterWeighttypes: data });
+                successfulResponses.push("Weighttypes");
             }
+
             if (responseDrivers.ok) {
                 const data = await responseDrivers.json();
-                //console.log(data);
                 set({ zu_MasterDrivers: data });
+                successfulResponses.push("Drivers");
             }
+
             if (responseTransporters.ok) {
                 const data = await responseTransporters.json();
-                //console.log(data);
                 set({ zu_MasterTransporters: data });
+                successfulResponses.push("Transporters");
             }
+
+            if (successfulResponses.length === 0) {
+                throw new Error("All requests failed.");
+            }
+
+            //console.log(`Successful requests for: ${successfulResponses.join(", ")}`);
+            return 'success';
         } catch (error) {
             console.error("Error fetching data:", error);
-            //set({ zu_Data: [] });
         }
     },
     zuFetch: async () => {
         try {
-            console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
+            //console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
             const response = await fetch(get().zu_Url_Fetch, get().zu_Option_Fetch);
             if (!response.ok) {
                 set({ zu_Data: [] });
@@ -362,6 +328,41 @@ export const useStore = create((set, get) => ({
             return data;
         } catch (error) {
             console.error("Error deleting data:", error);
+        }
+    },
+    zuLogin: async (username, password) => {
+        const url = get().zu_Url_Base + 'userlogin/login.php'
+        try {
+            //console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
+            const response = await fetch('https://theothai.com/ttw_webreport/API/api/userlogin/login.php', {
+                method: 'POST',
+                body: JSON.stringify({
+                    "LogInName": username,
+                    "LogInPassword": password
+                })
+            });
+            if (!response.ok) {
+                //set({ zu_Data: [] });
+                console.log(response.message);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('data ', data);
+                return 'success';
+            }
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+
+        }
+    },
+    zuCheckUser: (func) => {
+        const storedUser = Cookies.get("user");
+        if (!storedUser) {
+            func()
+            return;
         }
     },
     zuResetData: () => set({ zu_Data: [] }),

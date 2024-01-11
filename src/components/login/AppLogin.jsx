@@ -6,18 +6,23 @@ import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import Cookies from "js-cookie";
+import { useStore } from "../../zustand/Store";
 
 function AppLogin() {
+  const { zuLogin } = useStore();
+
   const navigate = useNavigate();
   const toast = useRef(null);
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("1234");
 
-  const handleLogin = () => {
-    if (username === "admin" && password === "1234") {
-      const authenticatedUser = { username: username };
-      Cookies.set("username", JSON.stringify(authenticatedUser), {
-        expires: 100 / 1000,
+  const handleLogin = async () => {
+    const res = await zuLogin(username, password);
+
+    if (res === "success") {
+      const authenticatedUser = { username, password };
+      Cookies.set("user", JSON.stringify(authenticatedUser), {
+        expires: 1 / 1000,
       });
       return navigate("/main");
     } else {
