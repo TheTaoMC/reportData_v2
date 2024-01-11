@@ -198,6 +198,29 @@ const header = (dt, onSearchFiltersChange) => {
   ];
   const menuItems2 = [
     {
+      label: "PDF",
+      icon: "pi pi-file-pdf",
+      command: exportPdf,
+    },
+    {
+      label: "CSV",
+      icon: "pi pi-file",
+      command: () => exportCSV(false),
+    },
+  ];
+  const menuItems3 = [
+    {
+      label: "Edit",
+      icon: "pi pi-fw pi-pencil",
+      command: handleClickEdit,
+    },
+    {
+      id: 3,
+      label: "Delete",
+      icon: "pi pi-times",
+      command: confirmdel,
+    },
+    {
       label: "Export",
       icon: "pi pi-file-pdf",
       command: exportPdf,
@@ -209,82 +232,82 @@ const header = (dt, onSearchFiltersChange) => {
     },
   ];
 
+  console.log("menuItems1 ", menuItems1);
   return (
     <>
-      {(zu_MasterCustomers.length !== 0 || zu_MasterWeighttypes.length !== 0 || zu_MasterProducts.length !== 0 || zu_MasterTransporters.length !== 0 ||zu_MasterDrivers.length !== 0) && (
-        <div className="flex sm:flex-row flex-col  sm:align-items-center items-center justify-between gap-2">
-          <Toast ref={toast} />
-          <ConfirmDialog className="text-6xl border border-gray-950" />
+      <div className="flex sm:flex-row flex-col  sm:align-items-center items-center justify-between gap-2">
+        <Toast ref={toast} />
+        <ConfirmDialog className="text-6xl border border-gray-950" />
 
-          <div className="flex sm:hidden self-start">
-            <Menu
-              model={zu_Title !== "รายงานชั่ง" ? menuItems1 : menuItems2}
-              popup
-              ref={menuLeft}
-              id="popup_menu_left"
-            />
-            <Button
-              label="Menu"
-              icon="pi pi-bars"
-              className="p-2 w-24 h-10"
-              onClick={(event) => menuLeft.current.toggle(event)}
-              aria-controls="popup_menu_left"
-              aria-haspopup
-            />
-          </div>
-
-          {zu_Title !== "รายงานชั่ง" && (
-            <div className="sm:flex hidden sm:flex-row flex-col gap-2">
-              {zu_Title !== "ข้อมูลชั่งน้ำหนัก" && (
-                <Button
-                  className=" p-2 w-24 h-10"
-                  label="Add"
-                  icon="pi pi-plus"
-                  onClick={handleClickAdd}
-                />
-              )}
-              <AddData />
-
-              <Button
-                className=" p-2 w-24 h-10"
-                label="Edit"
-                icon="pi pi-pencil"
-                onClick={handleClickEdit}
-              />
-
-              <Button
-                className=" p-2 w-24 h-10"
-                severity="danger"
-                label="Delete"
-                icon="pi pi-times"
-                onClick={confirmdel}
-              />
-            </div>
-          )}
-
-          <div className="sm:flex hidden sm:flex-row flex-col gap-2 w-screen justify-end">
-            <Button
-              className=" p-2 w-24 h-10 rounded-md"
-              type="button"
-              label="Export"
-              icon="pi pi-file-pdf"
-              //severity="warning"
-              rounded
-              onClick={exportPdf}
-              data-pr-tooltip="PDF"
-            />
-            <Button
-              className=" p-2 w-24 h-10 rounded-md"
-              type="button"
-              label="Export"
-              icon="pi pi-file"
-              rounded
-              onClick={() => exportCSV(false)}
-              data-pr-tooltip="CSV"
-            />
-          </div>
+        <div className="flex sm:hidden self-start">
+          <Menu
+            model={zu_Title === "รายงานชั่ง" ? menuItems2 : zu_Title === "ข้อมูลชั่งน้ำหนัก" ? menuItems3 : menuItems1}
+            popup
+            ref={menuLeft}
+            id="popup_menu_left"
+          />
+          <Button
+            label="Menu"
+            icon="pi pi-bars"
+            className="p-2 w-24 h-10"
+            onClick={(event) => menuLeft.current.toggle(event)}
+            aria-controls="popup_menu_left"
+            aria-haspopup
+          />
         </div>
-      )}
+
+        {zu_Title !== "รายงานชั่ง" && (
+          <div className="sm:flex hidden sm:flex-row flex-col gap-2">
+            {zu_Title !== "ข้อมูลชั่งน้ำหนัก" && (
+              <Button
+                className=" p-2 w-24 h-10"
+                label="Add"
+                icon="pi pi-plus"
+                onClick={handleClickAdd}
+              />
+            )}
+            <AddData />
+
+            <Button
+              className=" p-2 w-24 h-10"
+              label="Edit"
+              icon="pi pi-pencil"
+              onClick={handleClickEdit}
+            />
+
+            <Button
+              className=" p-2 w-24 h-10"
+              severity="danger"
+              label="Delete"
+              icon="pi pi-times"
+              onClick={confirmdel}
+            />
+          </div>
+        )}
+
+        <div className="sm:flex hidden sm:flex-row flex-col gap-2 w-screen justify-end">
+          <Button
+            className=" p-2 w-24 h-10 rounded-md"
+            type="button"
+            label="PDF"
+            icon="pi pi-file-pdf"
+            //severity="warning"
+            rounded
+            onClick={exportPdf}
+            data-pr-tooltip="PDF"
+          />
+          <Button
+            className=" p-2 w-24 h-10 rounded-md"
+            type="button"
+            label="CSV"
+            icon="pi pi-file"
+            rounded
+            onClick={() => exportCSV(false)}
+            data-pr-tooltip="CSV"
+          />
+        </div>
+      </div>
+
       {zu_Title === "รายงานชั่ง" || zu_Title === "ข้อมูลชั่งน้ำหนัก" ? (
         <AppSearch onSearchFiltersChange={onSearchFiltersChange} />
       ) : null}
