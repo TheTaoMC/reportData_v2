@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button } from "primereact/button";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { confirmDialog } from "primereact/confirmdialog";
@@ -23,6 +23,7 @@ const header = (dt, onSearchFiltersChange) => {
     zu_MasterProducts,
     zu_MasterTransporters,
     zu_MasterDrivers,
+    zu_permission,
   } = useStore();
   const {
     zuDelData,
@@ -31,6 +32,7 @@ const header = (dt, onSearchFiltersChange) => {
     zuToggleEdit,
     zuSetTitleFromAddEdit,
     zuToggleVisible,
+    zuCheckUser,
   } = useStore();
 
   //console.log("zu_Url,zu_Option: ", zu_Url_Del, zu_Option_Del);
@@ -166,24 +168,46 @@ const header = (dt, onSearchFiltersChange) => {
       zuToggleResetState();
     } */
   };
-
+  //console.log("zu_permission ", zu_permission);
   const menu = useRef(null);
   const menuItems1 = [
     {
       label: "Add",
       icon: "pi pi-plus",
       command: handleClickAdd,
+      visible:
+        zu_Title === "ข้อมูลชั่งน้ำหนัก" ||
+        zu_Title === "รายงานชั่ง" ||
+        zu_permission === false
+          ? false
+          : true,
     },
     {
       label: "Edit",
       icon: "pi pi-fw pi-pencil",
       command: handleClickEdit,
+      visible:
+        zu_Title === "ข้อมูลชั่งน้ำหนัก" && zu_permission === true
+          ? true
+          : zu_Title === "รายงานชั่ง"
+          ? false
+          : zu_permission === false
+          ? false
+          : true,
     },
     {
       id: 3,
       label: "Delete",
       icon: "pi pi-times",
       command: confirmdel,
+      visible:
+        zu_Title === "ข้อมูลชั่งน้ำหนัก" && zu_permission === true
+          ? true
+          : zu_Title === "รายงานชั่ง"
+          ? false
+          : zu_permission === false
+          ? false
+          : true,
     },
     {
       label: "Export",
@@ -232,7 +256,9 @@ const header = (dt, onSearchFiltersChange) => {
     },
   ];
 
-  
+  useEffect(() => {
+    zuCheckUser();
+  }, []);
   return (
     <>
       <div className="flex sm:flex-row flex-col  sm:align-items-center items-center justify-between gap-2">
@@ -240,12 +266,19 @@ const header = (dt, onSearchFiltersChange) => {
         <ConfirmDialog className="text-6xl border border-gray-950" />
 
         <div className="flex sm:hidden self-start">
-          <Menu
-            model={zu_Title === "รายงานชั่ง" ? menuItems2 : zu_Title === "ข้อมูลชั่งน้ำหนัก" ? menuItems3 : menuItems1}
+          {/*           <Menu
+            model={
+              zu_Title === "รายงานชั่ง"
+                ? menuItems2
+                : zu_Title === "ข้อมูลชั่งน้ำหนัก"
+                ? menuItems3
+                : menuItems1
+            }
             popup
             ref={menuLeft}
             id="popup_menu_left"
-          />
+          /> */}
+          <Menu model={menuItems1} popup ref={menuLeft} id="popup_menu_left" />
           <Button
             label="Menu"
             icon="pi pi-bars"
@@ -260,6 +293,13 @@ const header = (dt, onSearchFiltersChange) => {
           <div className="sm:flex hidden sm:flex-row flex-col gap-2">
             {zu_Title !== "ข้อมูลชั่งน้ำหนัก" && (
               <Button
+                visible={
+                  zu_Title === "ข้อมูลชั่งน้ำหนัก" ||
+                  zu_Title === "รายงานชั่ง" ||
+                  zu_permission === false
+                    ? false
+                    : true
+                }
                 className=" p-2 w-24 h-10"
                 label="Add"
                 icon="pi pi-plus"
@@ -269,6 +309,15 @@ const header = (dt, onSearchFiltersChange) => {
             <AddData />
 
             <Button
+              visible={
+                zu_Title === "ข้อมูลชั่งน้ำหนัก" && zu_permission === true
+                  ? true
+                  : zu_Title === "รายงานชั่ง"
+                  ? false
+                  : zu_permission === false
+                  ? false
+                  : true
+              }
               className=" p-2 w-24 h-10"
               label="Edit"
               icon="pi pi-pencil"
@@ -276,6 +325,15 @@ const header = (dt, onSearchFiltersChange) => {
             />
 
             <Button
+              visible={
+                zu_Title === "ข้อมูลชั่งน้ำหนัก" && zu_permission === true
+                  ? true
+                  : zu_Title === "รายงานชั่ง"
+                  ? false
+                  : zu_permission === false
+                  ? false
+                  : true
+              }
               className=" p-2 w-24 h-10"
               severity="danger"
               label="Delete"

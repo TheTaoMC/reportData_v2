@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AppNavber from "../navbar/AppNavber";
 import { Button } from "primereact/button";
 import { Password } from "primereact/password";
@@ -9,21 +9,28 @@ import Cookies from "js-cookie";
 import { useStore } from "../../zustand/Store";
 
 function AppLogin() {
-  const { zuLogin } = useStore();
+  const { zuLogin, zuCheckUser } = useStore();
 
   const navigate = useNavigate();
   const toast = useRef(null);
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("1234");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if (Cookies.get("user")) {
+      console.log("ว่าง");
+      return navigate("/main");
+    }
+    //zuCheckUser(() => navigate("/main"));
+  }, []);
   const handleLogin = async () => {
     const res = await zuLogin(username, password);
 
     if (res === "success") {
-      const authenticatedUser = { username, password };
+      /*       const authenticatedUser = { username, password };
       Cookies.set("user", JSON.stringify(authenticatedUser), {
         expires: 1 / 1000,
-      });
+      }); */
       return navigate("/main");
     } else {
       //alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");

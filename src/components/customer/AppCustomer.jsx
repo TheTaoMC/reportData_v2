@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
-
+import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 
@@ -27,8 +27,9 @@ function AppCustomer() {
     zuSetEdit,
     zuSetColumns,
     zuSetTitle,
+    zuCheckUser,
   } = useStore();
-
+  const navigate = useNavigate();
   const [data, setData] = useState("");
   const [dataID, setDataID] = useState("");
   const [customerID, setCustomerID] = useState("");
@@ -36,8 +37,6 @@ function AppCustomer() {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [flagCancel, setFlagCancel] = useState(false);
-
-
 
   const resetState = () => {
     setDataID("");
@@ -61,7 +60,6 @@ function AppCustomer() {
   useEffect(() => setState(), [zu_ToggleEdit]);
   //resetState
   useEffect(() => resetState(), [zu_ToggleResetState]);
-
 
   const columns = [
     {
@@ -188,6 +186,7 @@ function AppCustomer() {
 
   //Load Data รอบแรก
   useEffect(() => {
+    zuCheckUser(() => navigate("/"));
     zuResetData();
     const urlread =
       "https://theothai.com/ttw_webreport/API/api/customer/read.php";

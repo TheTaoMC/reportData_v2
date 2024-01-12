@@ -41,7 +41,7 @@ function Doughnut() {
         type="doughnut"
         data={chartData}
         options={chartOptions}
-        className="w-[50%] md:w-30rem"
+        className="w-[30%] md:w-30rem"
       />
     </div>
   )

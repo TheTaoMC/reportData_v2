@@ -2,7 +2,7 @@ import React, { useEffect,  useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
-
+import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 
@@ -26,10 +26,10 @@ function AppWeighttype() {
     zuSetDataID,
     zuSetEdit,
     zuSetColumns,
-    zuSetTitle,
+    zuSetTitle,zuCheckUser
   } = useStore();
   //console.log("zu_ToggleEdit: ", zu_ToggleEdit);
-
+  const navigate = useNavigate();
   const [data, setData] = useState("");
   const [dataID, setDataID] = useState("");
   const [weightTypeID, setWeightTypeID] = useState("");
@@ -182,12 +182,13 @@ function AppWeighttype() {
       zuSetDataID(dataID, weightTypeID);
       zuSetFromAddEdit(addedit);
       zuSetEdit(urledit, optionedit);
-      console.log(urledit, optionedit);
+      //console.log(urledit, optionedit);
     }
   }, [weightTypeName, weightTypeID, flagCancel]);
 
   //Load Data รอบแรก
   useEffect(() => {
+    zuCheckUser(() => navigate("/"));
     zuResetData();
     const urlread =
       "https://theothai.com/ttw_webreport/API/api/weighttype/read.php";

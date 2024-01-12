@@ -108,7 +108,7 @@ function AppNavber({ title }) {
   return (
     <>
       {title !== "login" && (
-        <div className="flex flex-wrap gap-2 justify-center p-2 bg-cyan-700 text-gray-200 text-lg">
+        <div className="flex flex-wrap gap-2 justify-center p-2 bg-blue-100 text-gray-200 text-lg">
           <div className="flex flex-wrap  self-start gap-2">
             <Button
               label="Main"
@@ -155,7 +155,7 @@ function AppNavber({ title }) {
               icon="pi pi-home"
               className="p-2 w-24 h-10"
               onClick={() => {
-                Cookies.remove("username");
+                Cookies.remove("user");
                 navigate("/");
               }}
               aria-controls="popup_menu_left"

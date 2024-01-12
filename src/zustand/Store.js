@@ -131,6 +131,8 @@ export const useStore = create((set, get) => ({
     zu_ID: "",
     zu_Columns: [],
 
+    zu_permission: false,
+
     zu_MasterCustomers: [],
     zu_MasterProducts: [],
     zu_MasterWeighttypes: [],
@@ -349,20 +351,33 @@ export const useStore = create((set, get) => ({
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('data ', data);
+                //console.log('data ', data);
+                const logInName = data.LogInName;
+                const permission = data.Permission;
+                const authenticatedUser = { logInName, permission };
+                Cookies.set("user", JSON.stringify(authenticatedUser), {
+                    expires: 10 / 1000,
+                });
                 return 'success';
             }
+
+
 
         } catch (error) {
             console.error("Error fetching data:", error);
 
         }
     },
-    zuCheckUser: (func) => {
+    zuCheckUser: async (func) => {
         const storedUser = Cookies.get("user");
         if (!storedUser) {
             func()
             return;
+        } else {
+            const res = await JSON.parse(Cookies.get('user'))
+            //console.log(res.permission);
+            set({ zu_permission: res.permission === 'Y' ? true : false });
+            //console.log(get().zu_permission);
         }
     },
     zuResetData: () => set({ zu_Data: [] }),

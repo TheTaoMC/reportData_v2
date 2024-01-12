@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
 import { v4 as uuidv4 } from "uuid";
-
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../../zustand/Store";
 function AppWeightreport() {
   const {
@@ -27,7 +27,7 @@ function AppWeightreport() {
     zuSetEdit,
     zuSetColumns,
     zuSetTitle,
-    zuToggleFetchFilter,
+    zuToggleFetchFilter,zuCheckUser
   } = useStore();
 /*   const [dataID, setDataID] = useState("");
   const [bodySearch, setBodySearch] = useState([
@@ -142,7 +142,7 @@ function AppWeightreport() {
       To: "",
     },
   ]); */
-
+  const navigate = useNavigate();
   /*   const fetchDataBody2 = () => {
     const result = bodySearch.map((e, i) => {
       return {
@@ -367,6 +367,7 @@ function AppWeightreport() {
 
   //Load Data รอบแรก
   useEffect(() => {
+    zuCheckUser(() => navigate("/"));
     zuResetData();
     const urlread =
       "https://theothai.com/ttw_webreport/API/api/weightreport/read.php";

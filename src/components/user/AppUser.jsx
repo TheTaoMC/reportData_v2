@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
-
+import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 
 import { useStore } from "../../zustand/Store";
+import { Dropdown } from "primereact/dropdown";
 
 function AppUser() {
   const {
@@ -15,6 +16,7 @@ function AppUser() {
     zu_ToggleResetState,
     zu_ToggleEdit,
     zu_Title_Form_AddEdit,
+    zu_Option_Edit,
   } = useStore();
   const {
     zuFetch,
@@ -27,30 +29,33 @@ function AppUser() {
     zuSetEdit,
     zuSetColumns,
     zuSetTitle,
+    zuCheckUser,
   } = useStore();
-
+  const navigate = useNavigate();
   const [dataID, setDataID] = useState("");
   const [logInName, setLogInName] = useState("");
   const [logInPassword, setLogInPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [permission, setPermission] = useState("");
+  const [permission, setPermission] = useState(false);
   const [flagCancel, setFlagCancel] = useState(false);
 
+  //console.log(zu_Option_Edit);
+  //console.log(zu_Data);
   const resetState = () => {
     setDataID("");
     setLogInName("");
     setLogInPassword("");
     setFullName("");
-    setPermission("");
+    setPermission(false);
     setFlagCancel(false);
   };
 
   const setState = () => {
     setDataID(zu_SelectedList.DataID);
-    setLogInName(zu_SelectedList.DriverID);
-    setLogInPassword(zu_SelectedList.DriverName);
-    setFullName(zu_SelectedList.Address1);
-    setPermission(zu_SelectedList.Address2);
+    setLogInName(zu_SelectedList.LogInName);
+    setLogInPassword(zu_SelectedList.LogInPassword);
+    setFullName(zu_SelectedList.FullName);
+    setPermission(zu_SelectedList.Permission === "Y" ? true : false);
     setFlagCancel(zu_SelectedList.FlagCancel === "Y" ? true : false);
   };
 
@@ -71,6 +76,10 @@ function AppUser() {
     {
       field: "FlagCancel",
       header: "FlagCancel",
+    },
+    {
+      field: "Permission",
+      header: "Permission",
     },
   ];
 
@@ -104,6 +113,24 @@ function AppUser() {
         />
       </div>
       <div>
+        <div className="">
+          <div>สถานะผู้ใช้งาน</div>
+          <div className="">
+            <Dropdown
+              className="min-w-[30%]"
+              value={permission}
+              onChange={(e) => setPermission(e.value)}
+              options={[
+                { show: "Admin", value: true },
+                { show: "User", value: false },
+              ].map((data) => ({
+                value: data.value,
+                label: data.show,
+              }))}
+              placeholder="Select a Country"
+            />
+          </div>
+        </div>
         <div className="flex gap-2  justify-between">
           <div className="flex gap-2 items-center">
             <div>สถานะ</div>
@@ -135,6 +162,7 @@ function AppUser() {
           LogInName: logInName,
           LogInPassword: logInPassword,
           FullName: fullName,
+          Permission: permission ? "Y" : "N",
           FlagCancel: flagCancel ? "Y" : "N",
         }),
       };
@@ -153,18 +181,20 @@ function AppUser() {
           LogInName: logInName,
           LogInPassword: logInPassword,
           FullName: fullName,
+          Permission: permission ? "Y" : "N",
           FlagCancel: flagCancel ? "Y" : "N",
         }),
       };
       zuSetDataID(dataID, logInName);
       zuSetFromAddEdit(addedit);
       zuSetEdit(urledit, optionedit);
-      console.log(urledit, optionedit);
+      //console.log("???? ", urledit, optionedit);
     }
-  }, [logInName, logInPassword, fullName, flagCancel]);
+  }, [logInName, logInPassword, fullName, flagCancel, permission]);
 
   //Load Data รอบแรก
   useEffect(() => {
+    zuCheckUser(() => navigate("/"));
     zuResetData();
     const urlread =
       "https://theothai.com/ttw_webreport/API/api/userlogin/read.php";

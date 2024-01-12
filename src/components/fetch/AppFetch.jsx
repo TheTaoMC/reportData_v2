@@ -1,22 +1,22 @@
-import {  useRef } from "react";
+import { useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import header from "./HeaderBtn";
 
 import { useStore } from "../../zustand/Store";
 
-function AppFetch({
-  sortField,
-  minWidth,
-  onSearchFiltersChange,
-}) {
+function AppFetch({ sortField, minWidth, onSearchFiltersChange }) {
   const { zu_Data, zu_SelectedList, zu_Columns, zu_Title } = useStore();
   const { zuSelectedList } = useStore();
   const dt = useRef(null);
 
   const funheader = () => {
-    return header( dt, onSearchFiltersChange);
+    return header(dt, onSearchFiltersChange);
   };
+
+   const statusTemplate = (e) => {
+      return e.FlagCancel === "Y" ? "ยกเลิก" : "ใช้งาน";
+  }; 
 
   return (
     <>
@@ -60,6 +60,7 @@ function AppFetch({
                 key={i}
                 field={e.field}
                 header={e.header}
+                //body={}
                 sortable
                 pt={{
                   headerCell: { className: "bg-sky-400" },

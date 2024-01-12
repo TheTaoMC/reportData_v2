@@ -27,6 +27,7 @@ function AppWeight() {
     zu_MasterProducts,
     zu_MasterTransporters,
     zu_MasterDrivers,
+    zu_permission,
   } = useStore();
   const {
     zuFetch,
@@ -63,6 +64,7 @@ function AppWeight() {
   const [remark3, setRemark3] = useState("");
   const [flagCancel, setFlagCancel] = useState(false); */
   //console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
+console.log(zu_permission);
 
   const option = {
     method: "POST",
@@ -634,11 +636,15 @@ function AppWeight() {
     }
   }, [blocked]);
 
+  const statusTemplate = (e) => {
+    return e.Permission === "Y" ? "Admin" : "User";
+  };
+
   return (
     <div>
       <BlockUI blocked={blocked} fullScreen />
       <AppNavber />
-      <AppFetch minWidth={"50rem"} />
+      <AppFetch statusTemplate={statusTemplate} minWidth={"50rem"} />
     </div>
   );
 }

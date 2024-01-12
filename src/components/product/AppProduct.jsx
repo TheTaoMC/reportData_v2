@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
 import AppFetch from "../fetch/AppFetch";
-
+import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Checkbox } from "primereact/checkbox";
@@ -27,9 +27,9 @@ function AppProduct() {
     zuSetDataID,
     zuSetEdit,
     zuSetColumns,
-    zuSetTitle,
+    zuSetTitle,zuCheckUser
   } = useStore();
-
+  const navigate = useNavigate();
   const [dataID, setDataID] = useState("");
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
@@ -173,6 +173,7 @@ function AppProduct() {
 
   //Load Data รอบแรก
   useEffect(() => {
+    zuCheckUser(() => navigate("/"));
     zuResetData();
     const urlread =
       "https://theothai.com/ttw_webreport/API/api/product/read.php";

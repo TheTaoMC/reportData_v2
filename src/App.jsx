@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
+
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import AppWeight from "./components/weight/AppWeight.jsx";
 import TableData2 from "./components/TableDatas2.jsx";
