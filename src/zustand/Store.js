@@ -220,7 +220,7 @@ export const useStore = create((set, get) => ({
     },
     zuFetch: async () => {
         try {
-            //console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
+            console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
             const response = await fetch(get().zu_Url_Fetch, get().zu_Option_Fetch);
             if (!response.ok) {
                 set({ zu_Data: [] });
@@ -356,7 +356,7 @@ export const useStore = create((set, get) => ({
                 const permission = data.Permission;
                 const authenticatedUser = { logInName, permission };
                 Cookies.set("user", JSON.stringify(authenticatedUser), {
-                    expires: 10 / 1000,
+                    expires: 100 / 1000,
                 });
                 return 'success';
             }

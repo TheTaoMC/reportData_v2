@@ -76,10 +76,16 @@ function AppUser() {
     {
       field: "FlagCancel",
       header: "FlagCancel",
+      body: (rowData) => {
+        return rowData.FlagCancel === "N" ? "ใช้งาน" : "ยกเลิก";
+      },
     },
     {
       field: "Permission",
       header: "Permission",
+      body: (rowData) => {
+        return rowData.Permission === "Y" ? "Admin" : "User";
+      },
     },
   ];
 

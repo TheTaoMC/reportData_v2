@@ -64,12 +64,12 @@ function AppWeight() {
   const [remark3, setRemark3] = useState("");
   const [flagCancel, setFlagCancel] = useState(false); */
   //console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
-console.log(zu_permission);
+  console.log(zu_permission);
 
   const option = {
     method: "POST",
     body: JSON.stringify({
-      /* WeightScaleIDInFilter: zu_SearchFilters[0].Filter,
+      WeightScaleIDInFilter: zu_SearchFilters[0].Filter,
       WeightScaleIDInFrom: zu_SearchFilters[0].From,
       WeightScaleIDInTo: zu_SearchFilters[0].To,
       WeightScaleIDOutFilter: zu_SearchFilters[1].Filter,
@@ -77,20 +77,20 @@ console.log(zu_permission);
       WeightScaleIDOutTo: zu_SearchFilters[1].To,
       WeightDateInFilter: zu_SearchFilters[2].Filter,
       WeightDateInFrom: zu_SearchFilters[2].From,
-      WeightDateInTo: zu_SearchFilters[2].To, */
+      WeightDateInTo: zu_SearchFilters[2].To,
       WeightDateOutFilter: zu_SearchFilters[3].Filter,
       WeightDateOutFrom: zu_SearchFilters[3].From,
       WeightDateOutTo: zu_SearchFilters[3].To,
-      /* SequenceWeightInFilter: zu_SearchFilters[4].Filter,
+      SequenceWeightInFilter: zu_SearchFilters[4].Filter,
       SequenceWeightInFrom: zu_SearchFilters[4].From,
       SequenceWeightInTo: zu_SearchFilters[4].To,
       SequenceWeightOutFilter: zu_SearchFilters[5].Filter,
       SequenceWeightOutFrom: zu_SearchFilters[5].From,
-      SequenceWeightOutTo: zu_SearchFilters[5].To, */
+      SequenceWeightOutTo: zu_SearchFilters[5].To,
       CarRegisterFilter: zu_SearchFilters[6].Filter,
       CarRegisterFrom: zu_SearchFilters[6].From,
       CarRegisterTo: zu_SearchFilters[6].To,
-      /*       WeightTypeIDFilter: zu_SearchFilters[7].Filter,
+      WeightTypeIDFilter: zu_SearchFilters[7].Filter,
       WeightTypeIDFrom: zu_SearchFilters[7].From,
       WeightTypeIDTo: zu_SearchFilters[7].To,
       CustomerIDFilter: zu_SearchFilters[8].Filter,
@@ -104,8 +104,8 @@ console.log(zu_permission);
       TransporterTo: zu_SearchFilters[10].To,
       DriverIDFilter: zu_SearchFilters[11].Filter,
       DriverIDFrom: zu_SearchFilters[11].From,
-      DriverIDTo: zu_SearchFilters[11].To, */
-      //FlagCancelFilter: bodySearch[12].Filter ? "Y" : "N",
+      DriverIDTo: zu_SearchFilters[11].To,
+      //FlagCancelFilter: zu_SearchFilters[12].Filter ? "Y" : "N",
       //FlagStatusFilter: bodySearch[13].Filter ? "Y" : "N",
     }),
   };
@@ -440,16 +440,16 @@ console.log(zu_permission);
       header: "WeightTimeOut",
     },
     {
+      field: "CarRegister",
+      header: "CarRegister",
+    },
+    {
       field: "WeightTypeID",
       header: "WeightTypeID",
     },
     {
       field: "WeightTypeName",
       header: "WeightTypeName",
-    },
-    {
-      field: "CarRegister",
-      header: "CarRegister",
     },
     {
       field: "CustomerID",

@@ -1,34 +1,37 @@
 import React from "react";
-import { AreaChart, BarChart, Card, Flex, Switch, Title } from "@tremor/react";
+import { AreaChart, Card, Title } from "@tremor/react";
 import { data } from "../../assets/data/data.jsx";
+
 const chartdata = [
   {
-    name: "Amphibians",
-    "Number of threatened species": 2488,
+    date: "Jan 22",
+    SemiAnalysis: 2890,
+    "The Pragmatic Engineer": 2338,
   },
   {
-    name: "Birds",
-    "Number of threatened species": 1445,
+    date: "Feb 22",
+    SemiAnalysis: 2756,
+    "The Pragmatic Engineer": 2103,
   },
   {
-    name: "Crustaceans",
-    "Number of threatened species": 743,
+    date: "Mar 22",
+    SemiAnalysis: 3322,
+    "The Pragmatic Engineer": 2194,
   },
   {
-    name: "Ferns",
-    "Number of threatened species": 281,
+    date: "Apr 22",
+    SemiAnalysis: 3470,
+    "The Pragmatic Engineer": 2108,
   },
   {
-    name: "Arachnids",
-    "Number of threatened species": 251,
+    date: "May 22",
+    SemiAnalysis: 3475,
+    "The Pragmatic Engineer": 1812,
   },
   {
-    name: "Corals",
-    "Number of threatened species": 232,
-  },
-  {
-    name: "Algae",
-    "Number of threatened species": 98,
+    date: "Jun 22",
+    SemiAnalysis: 3129,
+    "The Pragmatic Engineer": 1726,
   },
 ];
 
@@ -87,24 +90,25 @@ const data1 = [
     ],
   },
 ];
-const valueFormatter = (number) =>
-  `THB ${new Intl.NumberFormat("us").format(number).toString()}`;
 
-function Bar() {
+const valueFormatter = function (number) {
+  return "$ " + new Intl.NumberFormat("us").format(number).toString();
+};
+function Area() {
   return (
-    <Card className="">
-      <Title>Number of species threatened with extinction (2021)</Title>
-      <BarChart
-        className="mt-6  h-[25rem]"
+    <Card>
+      <Title>Newsletter revenue over time (USD)</Title>
+      <AreaChart
+        className="h-72 mt-4"
         data={data[0].SumByProduct}
         index="ProductDataID"
+        yAxisWidth={65}
         categories={["SumAmountNet"]}
-        colors={["blue"]}
+        colors={["indigo", "cyan"]}
         valueFormatter={valueFormatter}
-        yAxisWidth={48}
       />
     </Card>
   );
 }
 
-export default Bar;
+export default Area;

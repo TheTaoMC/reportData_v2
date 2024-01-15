@@ -104,6 +104,9 @@ function AppWeighttype() {
     {
       field: "FlagCancel",
       header: "FlagCancel",
+      body: (rowData) => {
+        return rowData.FlagCancel ==='N' ? "ใช้งาน" : "ยกเลิก";
+      },
     },
   ];
 

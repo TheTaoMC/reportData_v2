@@ -1,35 +1,4 @@
-import React from "react";
-import { Card, DonutChart, Title } from "@tremor/react";
-import { data } from "../../assets/data/data.jsx";
-
-const cities = [
-  {
-    name: "New York",
-    sales: 9800,
-  },
-  {
-    name: "London",
-    sales: 4567,
-  },
-  {
-    name: "Hong Kong",
-    sales: 3908,
-  },
-  {
-    name: "San Francisco",
-    sales: 2400,
-  },
-  {
-    name: "Singapore",
-    sales: 1908,
-  },
-  {
-    name: "Zurich",
-    sales: 1398,
-  },
-];
-
-const data1 = [
+export const data = [
   {
     SumByProduct: [
       {
@@ -81,25 +50,13 @@ const data1 = [
         SumWeightNet: 4000,
         SumAmountNet: 8000,
       },
+      {
+        ProductDataID: "Watermelon",
+        ProductID: "D101",
+        CountTransaction: 10,
+        SumWeightNet: 100,
+        SumAmountNet: 14000,
+      },
     ],
   },
 ];
-const valueFormatter = (number) =>
-  `THB ${new Intl.NumberFormat("us").format(number).toString()}`;
-function Doughnut() {
-  return (
-    <Card className="">
-      <Title>SumAmountNet</Title>
-      <DonutChart
-        className="mt-6  "
-        data={data[0].SumByProduct}
-        category="SumAmountNet"
-        index="ProductDataID"
-        valueFormatter={valueFormatter}
-        colors={["slate", "violet", "indigo", "rose", "cyan", "amber"]}
-      />
-    </Card>
-  );
-}
-
-export default Doughnut;

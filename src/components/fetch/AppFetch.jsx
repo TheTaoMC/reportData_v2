@@ -60,7 +60,7 @@ function AppFetch({ sortField, minWidth, onSearchFiltersChange }) {
                 key={i}
                 field={e.field}
                 header={e.header}
-                //body={}
+                body={e.body}
                 sortable
                 pt={{
                   headerCell: { className: "bg-sky-400" },

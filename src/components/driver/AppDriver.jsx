@@ -26,7 +26,8 @@ function AppDriver() {
     zuSetDataID,
     zuSetEdit,
     zuSetColumns,
-    zuSetTitle,zuCheckUser
+    zuSetTitle,
+    zuCheckUser,
   } = useStore();
   const navigate = useNavigate();
   const [dataID, setDataID] = useState("");
@@ -59,7 +60,6 @@ function AppDriver() {
   //resetState
   useEffect(() => resetState(), [zu_ToggleResetState]);
 
-
   const columns = [
     {
       field: "DriverID",
@@ -80,6 +80,9 @@ function AppDriver() {
     {
       field: "FlagCancel",
       header: "FlagCancel",
+      body: (rowData) => {
+        return rowData.FlagCancel ==='N' ? "ใช้งาน" : "ยกเลิก";
+      },
     },
   ];
 

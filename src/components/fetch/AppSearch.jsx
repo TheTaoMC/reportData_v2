@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Checkbox } from "@material-tailwind/react";
+//import { Checkbox } from "@material-tailwind/react";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
@@ -252,6 +252,7 @@ function AppSearch({ onSearchFiltersChange }) {
   //filterKey คือตัวเลข
   const handleCheckbox = (i) => {
     const updatedFilters = [...zu_SearchFilters];
+    console.log([...zu_SearchFilters]);
     updatedFilters[i] = {
       ...updatedFilters[i],
       Filter: !updatedFilters[i].Filter,
@@ -260,11 +261,10 @@ function AppSearch({ onSearchFiltersChange }) {
     // Update the Zustand store with the new filters
     zuSetSearchFiltersCheckbox(updatedFilters);
   };
+  console.log("zu_SearchFilters ", zu_SearchFilters);
 
-  //console.log('zu_SearchFilters ',zu_SearchFilters);
   const handleText = (index, fromorto, newValue) => {
     if (fromorto === "From") {
-
       const updatedFilters = [...zu_SearchFilters];
       updatedFilters[index] = {
         ...updatedFilters[index],
@@ -481,6 +481,7 @@ function AppSearch({ onSearchFiltersChange }) {
     //zuSetSearchFilters(filters2);
     zuToggleSearch();
   };
+  //console.log("zu_SearchFilters ", zu_SearchFilters);
   return (
     <div>
       <Accordion
@@ -509,8 +510,9 @@ function AppSearch({ onSearchFiltersChange }) {
                       </label>
                     ) : (
                       <>
-                        <Checkbox
-                          className={"scale-150 cursor-pointer"}
+                        <input type="checkbox"
+                        
+                          className={"scale-150 cursor-pointer mr-2"}
                           onChange={() => handleCheckbox(i)}
                           checked={e.Filter}
                         />

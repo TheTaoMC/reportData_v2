@@ -108,8 +108,23 @@ function AppNavber({ title }) {
   return (
     <>
       {title !== "login" && (
-        <div className="flex flex-wrap gap-2 justify-center p-2 bg-blue-100 text-gray-200 text-lg">
-          <div className="flex flex-wrap  self-start gap-2">
+        //<div className="flex flex-wrap gap-2 justify-center p-2 bg-blue-100 text-gray-200 text-lg">
+        <div className="flex gap-2 justify-between p-2 bg-blue-100 text-gray-500 text-lg">
+          <div>
+            <div className="flex  md:flex-row">
+              <img
+                src="https://webv3.theo.co.th/wp-content/uploads/2022/05/Logo_New-1.jpg"
+                alt=""
+                //width={45}
+                className="p-1 h-20 xs:h-10"
+              />
+              <div className="hidden xs:block xs:self-end">
+                <div className="text-xs">บริษัท ธีโอเอ็นจิเนียริ่งจำกัด </div>
+                <div className="text-xs">THEO Engineering Co, Ltd.</div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <Button
               label="Main"
               icon="pi pi-home"
