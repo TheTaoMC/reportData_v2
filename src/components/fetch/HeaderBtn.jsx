@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Button } from "primereact/button";
-import { ConfirmDialog } from "primereact/confirmdialog";
-import { confirmDialog } from "primereact/confirmdialog";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
 import { Menu } from "primereact/menu";
 import "primeicons/primeicons.css";
@@ -90,9 +89,11 @@ const header = (dt, onSearchFiltersChange) => {
     confirmDialog({
       message: "ยืนยันการลบข้อมูล",
       header: "แจ้งเตือน !!!",
-      icon: "pi pi-info-circle",
-      acceptClassName: "",
-      rejectClassName: "bg-red-700 hover:bg-red-800",
+      icon: "pi pi-times",
+      acceptClassName: "w-[80px]",
+      defaultFocus: "reject",
+      rejectClassName: "w-[80px] bg-red-700 hover:bg-red-800",
+      headerClassName: "w-[20rem]",
       accept,
       reject,
     });

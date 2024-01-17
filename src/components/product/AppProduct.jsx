@@ -27,7 +27,8 @@ function AppProduct() {
     zuSetDataID,
     zuSetEdit,
     zuSetColumns,
-    zuSetTitle,zuCheckUser
+    zuSetTitle,
+    zuCheckUser,
   } = useStore();
   const navigate = useNavigate();
   const [dataID, setDataID] = useState("");
@@ -68,12 +69,19 @@ function AppProduct() {
     {
       field: "Price",
       header: "Price",
+      align: "right",
+      alignHeader: "right",
+      body: (rowData) => {
+        return rowData.Price.toFixed(2);
+      },
     },
     {
       field: "FlagCancel",
       header: "FlagCancel",
+      align: "center",
+      alignHeader: "center",
       body: (rowData) => {
-        return rowData.FlagCancel ==='N' ? "ใช้งาน" : "ยกเลิก";
+        return rowData.FlagCancel === "N" ? "ใช้งาน" : "ยกเลิก";
       },
     },
   ];

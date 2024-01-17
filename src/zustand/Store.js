@@ -24,14 +24,14 @@ export const useStore = create((set, get) => ({
             To: "",
         },
         {
-            Title: "เวลาชั่งเข้า",
+            Title: "วันที่ชั่งเข้า",
             Filter: false,
             Typeinput: "calendar",
             From: new Date(),
             To: new Date(),
         },
         {
-            Title: "เวลาชั่งออก",
+            Title: "วันที่ชั่งออก",
             Filter: false,
             Typeinput: "calendar",
             From: new Date(),
@@ -64,8 +64,8 @@ export const useStore = create((set, get) => ({
             Title: "ประเภทชั่ง",
             Filter: false,
             Typeinput: "dropdown",
-            From: "Select a Country",
-            To: "Select a Country",
+            From: "",
+            To: "",
         },
         {
             Tablename: "customer",
@@ -80,24 +80,24 @@ export const useStore = create((set, get) => ({
             Title: "สินค้า",
             Filter: false,
             Typeinput: "dropdown",
-            From: "Select a Country",
-            To: "Select a Country",
+            From: "",
+            To: "",
         },
         {
             Tablename: "transporter",
             Title: "ผู้ขนส่ง",
             Filter: false,
             Typeinput: "dropdown",
-            From: "Select a Country",
-            To: "Select a Country",
+            From: "",
+            To: "",
         },
         {
             Tablename: "driver",
             Title: "พนักงานขับรถ",
             Filter: false,
             Typeinput: "dropdown",
-            From: "Select a Country",
-            To: "Select a Country",
+            From: "",
+            To: "",
         },
         {
             Title: "สถานะการยกเลิก",
@@ -220,7 +220,7 @@ export const useStore = create((set, get) => ({
     },
     zuFetch: async () => {
         try {
-            console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
+            console.log('get() ',get().zu_Url_Fetch, get().zu_Option_Fetch);
             const response = await fetch(get().zu_Url_Fetch, get().zu_Option_Fetch);
             if (!response.ok) {
                 set({ zu_Data: [] });
@@ -332,16 +332,18 @@ export const useStore = create((set, get) => ({
             console.error("Error deleting data:", error);
         }
     },
-    zuLogin: async (username, password) => {
+    zuLogin: async (username, password,formData) => {
         const url = get().zu_Url_Base + 'userlogin/login.php'
         try {
             //console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
             const response = await fetch('https://theothai.com/ttw_webreport/API/api/userlogin/login.php', {
                 method: 'POST',
-                body: JSON.stringify({
+                body: JSON.stringify(/* {
                     "LogInName": username,
                     "LogInPassword": password
-                })
+                } */
+                formData
+                )
             });
             if (!response.ok) {
                 //set({ zu_Data: [] });
@@ -356,7 +358,7 @@ export const useStore = create((set, get) => ({
                 const permission = data.Permission;
                 const authenticatedUser = { logInName, permission };
                 Cookies.set("user", JSON.stringify(authenticatedUser), {
-                    expires: 100 / 1000,
+                    expires: 0.5 / 1000,
                 });
                 return 'success';
             }

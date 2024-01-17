@@ -14,9 +14,9 @@ function AppFetch({ sortField, minWidth, onSearchFiltersChange }) {
     return header(dt, onSearchFiltersChange);
   };
 
-   const statusTemplate = (e) => {
-      return e.FlagCancel === "Y" ? "ยกเลิก" : "ใช้งาน";
-  }; 
+  const statusTemplate = (e) => {
+    return e.FlagCancel === "Y" ? "ยกเลิก" : "ใช้งาน";
+  };
 
   return (
     <>
@@ -61,6 +61,7 @@ function AppFetch({ sortField, minWidth, onSearchFiltersChange }) {
                 field={e.field}
                 header={e.header}
                 body={e.body}
+                align={e.align}
                 sortable
                 pt={{
                   headerCell: { className: "bg-sky-400" },

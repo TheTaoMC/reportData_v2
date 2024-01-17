@@ -95,7 +95,7 @@ function AppWeight() {
       WeightTypeIDTo: zu_SearchFilters[7].To,
       CustomerIDFilter: zu_SearchFilters[8].Filter,
       CustomerIDFrom: zu_SearchFilters[8].From,
-      customerIDTo: zu_SearchFilters[8].To,
+      CustomerIDTo: zu_SearchFilters[8].To,
       ProductIDFilter: zu_SearchFilters[9].Filter,
       ProductIDFrom: zu_SearchFilters[9].From,
       ProductIDTo: zu_SearchFilters[9].To,
@@ -432,12 +432,18 @@ function AppWeight() {
       header: "DataID",
     },
     {
-      field: "WeightTimeIn",
-      header: "WeightTimeIn",
+      field: "WeightDateIn",
+      header: "WeightDateIn",
+      body: (rowData) => {
+        return moment(rowData.WeightDateOut).format("DD/MM/YYYY");
+      },
     },
     {
-      field: "WeightTimeOut",
-      header: "WeightTimeOut",
+      field: "WeightDateOut",
+      header: "WeightDateOut",
+      body: (rowData) => {
+        return moment(rowData.WeightDateOut).format("DD/MM/YYYY");
+      },
     },
     {
       field: "CarRegister",
@@ -474,6 +480,14 @@ function AppWeight() {
     {
       field: "TransporterName",
       header: "TransporterName",
+    },
+    {
+      field: "DriverID",
+      header: "DriverID",
+    },
+    {
+      field: "DriverName",
+      header: "DriverName",
     },
     {
       field: "Remark1",

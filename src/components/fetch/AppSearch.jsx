@@ -9,6 +9,7 @@ import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 
 import { useStore } from "../../zustand/Store";
+import moment from "moment/moment";
 
 function AppSearch({ onSearchFiltersChange }) {
   const {
@@ -264,6 +265,7 @@ function AppSearch({ onSearchFiltersChange }) {
   console.log("zu_SearchFilters ", zu_SearchFilters);
 
   const handleText = (index, fromorto, newValue) => {
+    //console.log("newValue ", newValue);
     if (fromorto === "From") {
       const updatedFilters = [...zu_SearchFilters];
       updatedFilters[index] = {
@@ -323,9 +325,19 @@ function AppSearch({ onSearchFiltersChange }) {
               <Calendar
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                showTime
-                value={zu_SearchFilters[index].From}
-                onChange={(e) => handleText(index, fromorto, e.value)}
+                //showTime
+                //value={zu_SearchFilters[index].From}
+                value={moment(
+                  zu_SearchFilters[index].From,
+                  "DD/MM/YYYY HH:mm:ss"
+                ).toDate()}
+                onChange={(e) =>
+                  handleText(
+                    index,
+                    fromorto,
+                    moment(e.value).startOf("day").format("DD/MM/YYYY HH:mm:ss")
+                  )
+                }
                 hourFormat="24"
                 dateFormat="dd/mm/yy"
                 showIcon
@@ -336,9 +348,20 @@ function AppSearch({ onSearchFiltersChange }) {
               <Calendar
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                showTime
-                value={zu_SearchFilters[index].To}
-                onChange={(e) => handleText(index, fromorto, e.value)}
+                //showTime
+                value={moment(
+                  zu_SearchFilters[index].To,
+                  "DD/MM/YYYY HH:mm:ss"
+                ).toDate()}
+                onChange={(e) =>
+                  handleText(
+                    index,
+                    fromorto,
+                     moment(e.value)
+                      .startOf("day")
+                      .format("DD/MM/YYYY HH:mm:ss") 
+                  )
+                }
                 hourFormat="24"
                 dateFormat="dd/mm/yy"
                 showIcon
@@ -385,7 +408,7 @@ function AppSearch({ onSearchFiltersChange }) {
                       }))
                     : [] // Add more cases as needed
                 }
-                placeholder="Select a Country"
+                placeholder="เลือกข้อมูล"
                 filter
                 showClear
               />
@@ -425,7 +448,7 @@ function AppSearch({ onSearchFiltersChange }) {
                       }))
                     : [] // Add more cases as needed
                 }
-                placeholder="Select a Country"
+                placeholder="เลือกข้อมูล"
                 filter
                 showClear
               />
@@ -510,8 +533,8 @@ function AppSearch({ onSearchFiltersChange }) {
                       </label>
                     ) : (
                       <>
-                        <input type="checkbox"
-                        
+                        <input
+                          type="checkbox"
                           className={"scale-150 cursor-pointer mr-2"}
                           onChange={() => handleCheckbox(i)}
                           checked={e.Filter}

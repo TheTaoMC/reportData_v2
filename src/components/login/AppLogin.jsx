@@ -15,7 +15,11 @@ function AppLogin() {
   const toast = useRef(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [formData, setFormData] = useState({
+    LogInName: "",
+    LogInPassword: "",
+  });
+  console.log("formData ", formData);
   useEffect(() => {
     if (Cookies.get("user")) {
       console.log("ว่าง");
@@ -24,7 +28,7 @@ function AppLogin() {
     //zuCheckUser(() => navigate("/main"));
   }, []);
   const handleLogin = async () => {
-    const res = await zuLogin(username, password);
+    const res = await zuLogin(username, password,formData);
 
     if (res === "success") {
       /*       const authenticatedUser = { username, password };
@@ -50,6 +54,15 @@ function AppLogin() {
       console.log("Enter key pressed");
     }
   };
+
+  const updateFormData = (field, value) => {
+    //console.log("field, value ", field, value);
+    setFormData((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+
   return (
     <div>
       <Toast ref={toast} />
@@ -66,7 +79,10 @@ function AppLogin() {
               aria-describedby="username-help"
               autoFocus
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                //setUsername(e.target.value);
+                updateFormData("LogInName", e.target.value);
+              }}
             />
           </div>
           <div className="p-2 flex flex-col">
@@ -75,7 +91,10 @@ function AppLogin() {
               id="password"
               aria-describedby="password-help"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                //setPassword(e.target.value);
+                updateFormData("LogInPassword", e.target.value);
+              }}
               onKeyDown={handleKeyPress}
               feedback={false}
               //tabIndex={1}
