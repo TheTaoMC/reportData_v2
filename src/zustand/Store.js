@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import Cookies from "js-cookie";
+import moment from "moment/moment";
 
 export const useStore = create((set, get) => ({
     bears: 0,
@@ -27,15 +28,23 @@ export const useStore = create((set, get) => ({
             Title: "วันที่ชั่งเข้า",
             Filter: false,
             Typeinput: "calendar",
-            From: new Date(),
-            To: new Date(),
+            From: moment(new Date())
+                .startOf("day")
+                .format("DD/MM/YYYY HH:mm:ss"),
+            To: moment(new Date())
+                .startOf("day")
+                .format("DD/MM/YYYY HH:mm:ss"),
         },
         {
             Title: "วันที่ชั่งออก",
             Filter: false,
             Typeinput: "calendar",
-            From: new Date(),
-            To: new Date(),
+            From: moment(new Date())
+                .startOf("day")
+                .format("DD/MM/YYYY HH:mm:ss"),
+            To: moment(new Date())
+                .startOf("day")
+                .format("DD/MM/YYYY HH:mm:ss"),
 
         },
         {
@@ -220,7 +229,7 @@ export const useStore = create((set, get) => ({
     },
     zuFetch: async () => {
         try {
-            console.log('get() ',get().zu_Url_Fetch, get().zu_Option_Fetch);
+            console.log('get() ', get().zu_Url_Fetch, get().zu_Option_Fetch);
             const response = await fetch(get().zu_Url_Fetch, get().zu_Option_Fetch);
             if (!response.ok) {
                 set({ zu_Data: [] });
@@ -332,7 +341,7 @@ export const useStore = create((set, get) => ({
             console.error("Error deleting data:", error);
         }
     },
-    zuLogin: async (username, password,formData) => {
+    zuLogin: async (username, password, formData) => {
         const url = get().zu_Url_Base + 'userlogin/login.php'
         try {
             //console.log(get().zu_Url_Fetch, get().zu_Option_Fetch);
@@ -342,7 +351,7 @@ export const useStore = create((set, get) => ({
                     "LogInName": username,
                     "LogInPassword": password
                 } */
-                formData
+                    formData
                 )
             });
             if (!response.ok) {
@@ -358,7 +367,7 @@ export const useStore = create((set, get) => ({
                 const permission = data.Permission;
                 const authenticatedUser = { logInName, permission };
                 Cookies.set("user", JSON.stringify(authenticatedUser), {
-                    expires: 0.5 / 1000,
+                    expires: 1, // หาร1000 = 1 วินาที
                 });
                 return 'success';
             }

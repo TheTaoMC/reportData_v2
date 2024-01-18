@@ -64,7 +64,7 @@ function AppWeight() {
   const [remark3, setRemark3] = useState("");
   const [flagCancel, setFlagCancel] = useState(false); */
   //console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
-  console.log(zu_permission);
+  //console.log(zu_permission);
 
   const option = {
     method: "POST",
@@ -101,7 +101,7 @@ function AppWeight() {
       ProductIDTo: zu_SearchFilters[9].To,
       TransporterIDFilter: zu_SearchFilters[10].Filter,
       TransporterIDFrom: zu_SearchFilters[10].From,
-      TransporterTo: zu_SearchFilters[10].To,
+      TransporterIDTo: zu_SearchFilters[10].To,
       DriverIDFilter: zu_SearchFilters[11].Filter,
       DriverIDFrom: zu_SearchFilters[11].From,
       DriverIDTo: zu_SearchFilters[11].To,
@@ -118,7 +118,7 @@ function AppWeight() {
           //autoFocus
           disabled={true}
           className="w-[100%]"
-          value={zu_SelectedList.CarRegister}
+          value={zu_SelectedList.CarRegister || ""}
         />
       </div>
       <div>ประเภทชั่ง</div>
@@ -270,7 +270,7 @@ function AppWeight() {
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark1}
+          value={zu_SelectedList.Remark1 || ""}
           onChange={(e) => {
             const newValue = e.target.value;
             const updatedZuSelectedList = {
@@ -285,7 +285,7 @@ function AppWeight() {
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark2}
+          value={zu_SelectedList.Remark2 || ""}
           onChange={(e) => {
             const newValue = e.target.value;
             const updatedZuSelectedList = {
@@ -300,7 +300,7 @@ function AppWeight() {
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark3}
+          value={zu_SelectedList.Remark3 || ""}
           onChange={(e) => {
             const newValue = e.target.value;
             const updatedZuSelectedList = {
@@ -430,6 +430,22 @@ function AppWeight() {
     {
       field: "DataID",
       header: "DataID",
+    },
+    {
+      field: "WeightScaleIDIn",
+      header: "WeightScaleIDIn",
+    },
+    {
+      field: "WeightScaleIDOut",
+      header: "WeightScaleIDOut",
+    },
+    {
+      field: "SequenceWeightIn",
+      header: "SequenceWeightIn",
+    },
+    {
+      field: "SequenceWeightOut",
+      header: "SequenceWeightOut",
     },
     {
       field: "WeightDateIn",
@@ -601,8 +617,8 @@ function AppWeight() {
       const result = await zuFetchMaster();
       //console.log(result);
       setBlocked(result === "success" ? false : true);
-    }; // ตัวอย่างเท่านั้น
-  }, [zuFetchMaster]); // Dependencies ที่ถูกใส่ใน useMemo
+    }; 
+  }, [zuFetchMaster]); // Dependencies ใน useMemo
 
   useEffect(() => {
     memoizedZuFetchMaster();

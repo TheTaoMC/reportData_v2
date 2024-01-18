@@ -262,7 +262,7 @@ function AppSearch({ onSearchFiltersChange }) {
     // Update the Zustand store with the new filters
     zuSetSearchFiltersCheckbox(updatedFilters);
   };
-  console.log("zu_SearchFilters ", zu_SearchFilters);
+  //console.log("zu_SearchFilters ", zu_SearchFilters);
 
   const handleText = (index, fromorto, newValue) => {
     //console.log("newValue ", newValue);
@@ -329,13 +329,13 @@ function AppSearch({ onSearchFiltersChange }) {
                 //value={zu_SearchFilters[index].From}
                 value={moment(
                   zu_SearchFilters[index].From,
-                  "DD/MM/YYYY HH:mm:ss"
+                  "YYYY-MM-DD HH:mm:ss"
                 ).toDate()}
                 onChange={(e) =>
                   handleText(
                     index,
                     fromorto,
-                    moment(e.value).startOf("day").format("DD/MM/YYYY HH:mm:ss")
+                    moment(e.value).startOf("day").format("YYYY-MM-DD HH:mm:ss")
                   )
                 }
                 hourFormat="24"
@@ -357,9 +357,7 @@ function AppSearch({ onSearchFiltersChange }) {
                   handleText(
                     index,
                     fromorto,
-                     moment(e.value)
-                      .startOf("day")
-                      .format("DD/MM/YYYY HH:mm:ss") 
+                    moment(e.value).startOf("day").format("DD/MM/YYYY HH:mm:ss")
                   )
                 }
                 hourFormat="24"

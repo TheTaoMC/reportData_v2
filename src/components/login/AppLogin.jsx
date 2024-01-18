@@ -21,14 +21,14 @@ function AppLogin() {
   });
   console.log("formData ", formData);
   useEffect(() => {
+    //ถ้ามีuser เก็บใน cookie ให้ไปหน้า main
     if (Cookies.get("user")) {
-      console.log("ว่าง");
       return navigate("/main");
     }
     //zuCheckUser(() => navigate("/main"));
   }, []);
   const handleLogin = async () => {
-    const res = await zuLogin(username, password,formData);
+    const res = await zuLogin(username, password, formData);
 
     if (res === "success") {
       /*       const authenticatedUser = { username, password };
@@ -48,9 +48,9 @@ function AppLogin() {
   };
 
   const handleKeyPress = (event) => {
+    //Enter
     if (event.key === "Enter") {
       handleLogin();
-      // ทำสิ่งที่คุณต้องการทำเมื่อกดปุ่ม Enter
       console.log("Enter key pressed");
     }
   };
@@ -78,7 +78,7 @@ function AppLogin() {
               id="username"
               aria-describedby="username-help"
               autoFocus
-              value={username}
+              value={formData.LogInName}
               onChange={(e) => {
                 //setUsername(e.target.value);
                 updateFormData("LogInName", e.target.value);
@@ -90,7 +90,7 @@ function AppLogin() {
             <Password
               id="password"
               aria-describedby="password-help"
-              value={password}
+              value={formData.LogInPassword}
               onChange={(e) => {
                 //setPassword(e.target.value);
                 updateFormData("LogInPassword", e.target.value);
