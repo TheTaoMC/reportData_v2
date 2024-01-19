@@ -42,6 +42,7 @@ function AppSearch({ onSearchFiltersChange }) {
   const [dataWeighttypes, setDataWeighttypes] = useState([]);
   const [dataDrivers, setDataDrivers] = useState([]);
   const [dataTransporters, setDataTransporters] = useState([]);
+  const [activeIndex, setActiveIndex] = useState();
   //console.log("dataTransporters: ", dataTransporters);
   /*   const [filters, setFilters] = useState({
     WeightScaleIDInFilter: false,
@@ -479,7 +480,7 @@ function AppSearch({ onSearchFiltersChange }) {
     }
   };
 
-  const [activeIndex, setActiveIndex] = useState();
+  
 
   const onClickClose = () => {
     if (activeIndex.length === 0) {
