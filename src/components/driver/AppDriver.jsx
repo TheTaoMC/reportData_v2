@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
-import AppFetch from "../fetch/AppFetch";
+import AppTable from "../table/AppTable";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
@@ -81,7 +81,7 @@ function AppDriver() {
       field: "FlagCancel",
       header: "FlagCancel",
       body: (rowData) => {
-        return rowData.FlagCancel ==='N' ? "ใช้งาน" : "ยกเลิก";
+        return rowData.FlagCancel === "N" ? "ใช้งาน" : "ยกเลิก";
       },
     },
   ];
@@ -221,7 +221,7 @@ function AppDriver() {
   return (
     <div>
       <AppNavber />
-      <AppFetch sortField={"DriverName"} minWidth={"10rem"} />
+      <AppTable sortField={"DriverName"} minWidth={"10rem"} />
     </div>
   );
 }

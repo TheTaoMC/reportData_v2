@@ -5,7 +5,7 @@ import header from "./HeaderBtn";
 
 import { useStore } from "../../zustand/Store";
 
-function AppFetch({ sortField, minWidth, onSearchFiltersChange }) {
+function AppTable({ sortField, minWidth, onSearchFiltersChange }) {
   const { zu_Data, zu_SelectedList, zu_Columns, zu_Title } = useStore();
   const { zuSelectedList } = useStore();
   const dt = useRef(null);
@@ -13,11 +13,6 @@ function AppFetch({ sortField, minWidth, onSearchFiltersChange }) {
   const funheader = () => {
     return header(dt, onSearchFiltersChange);
   };
-
-  const statusTemplate = (e) => {
-    return e.FlagCancel === "Y" ? "ยกเลิก" : "ใช้งาน";
-  };
-
   return (
     <>
       <div className="max-w-[95%] mx-auto">
@@ -77,4 +72,4 @@ function AppFetch({ sortField, minWidth, onSearchFiltersChange }) {
   );
 }
 
-export default AppFetch;
+export default AppTable;

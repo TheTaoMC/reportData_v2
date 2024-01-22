@@ -46,7 +46,7 @@ export default {
           },
         },
         // dark mode
-        "dark-tremor": {
+        /* "dark-tremor": {
           brand: {
             faint: "#0B1229",
             muted: colors.blue[950],
@@ -74,7 +74,7 @@ export default {
             strong: colors.gray[50],
             inverted: colors.gray[950],
           },
-        },
+        }, */
       },
       boxShadow: {
         // light

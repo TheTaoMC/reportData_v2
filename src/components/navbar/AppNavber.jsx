@@ -124,7 +124,7 @@ function AppNavber({ title }) {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             <Button
               label="Main"
               icon="pi pi-home"
@@ -142,21 +142,23 @@ function AppNavber({ title }) {
               ref={menuData}
               id="popup_menu_left"
             />
+
             <Button
               label="Data"
               icon="pi pi-server"
-              className="p-2 w-24 h-10"
+              className="p-2 w-24 h-10 "
               onClick={(event) => menuData.current.toggle(event)}
               aria-controls="popup_menu_left"
               aria-haspopup
             />
+
             <Menu
               model={reportmenuItems}
               popup
               ref={menuReport}
               id="popup_menu_left"
             />
-            <Button
+            {/*             <Button
               label="Report"
               icon="pi pi-tablet"
               className="p-2 w-24 h-10"
@@ -164,11 +166,11 @@ function AppNavber({ title }) {
               onClick={() => navigate("/WeightReport")}
               aria-controls="popup_menu_left"
               aria-haspopup
-            />
+            /> */}
             <Button
               label="Logout"
               icon="pi pi-home"
-              className="p-2 w-24 h-10"
+              className="p-2 w-24 h-10 col-start-2 md:col-start-3 "
               onClick={() => {
                 Cookies.remove("user");
                 navigate("/");

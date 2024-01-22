@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppNavber from "../navbar/AppNavber";
-import AppFetch from "../fetch/AppFetch";
+import AppTable from "../table/AppTable";
+
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../zustand/Store";
@@ -27,9 +28,10 @@ function AppWeightreport() {
     zuSetEdit,
     zuSetColumns,
     zuSetTitle,
-    zuToggleFetchFilter,zuCheckUser
+    zuToggleFetchFilter,
+    zuCheckUser,
   } = useStore();
-/*   const [dataID, setDataID] = useState("");
+  /*   const [dataID, setDataID] = useState("");
   const [bodySearch, setBodySearch] = useState([
     {
       Title: "เครื่องชั่งขาเข้า",
@@ -204,7 +206,7 @@ function AppWeightreport() {
   }; */
 
   //console.log("bodySearch: ", bodySearch[0].Filter);
-  console.log('zu_SearchFilters: ',zu_SearchFilters);
+  console.log("zu_SearchFilters: ", zu_SearchFilters);
   const option = {
     method: "POST",
     body: JSON.stringify({
@@ -389,7 +391,7 @@ function AppWeightreport() {
   return (
     <div>
       <AppNavber />
-      <AppFetch minWidth={"50rem"} />
+      <AppTable minWidth={"50rem"} />
     </div>
   );
 }

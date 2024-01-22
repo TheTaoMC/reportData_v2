@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AppNavber from "../navbar/AppNavber";
-import AppFetch from "../fetch/AppFetch";
+import AppTable from "../table/AppTable";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 
@@ -47,7 +47,7 @@ function AppWeight() {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
 
-  const [xx,setXx] = useState([]);
+  const [xx, setXx] = useState([]);
   const [carRegister, setCarRegister] = useState("");
   const [weightType, setWeightType] = useState("");
   const [customer, setCustomer] = useState("");
@@ -398,7 +398,7 @@ function AppWeight() {
     },
   ];
 
-  console.log('zu_SelectedList ',zu_SelectedList);
+  console.log("zu_SelectedList ", zu_SelectedList);
 
   const setState = () => {
     setXx(zu_SelectedList);
@@ -525,7 +525,7 @@ function AppWeight() {
   return (
     <div>
       <AppNavber />
-      <AppFetch minWidth={"50rem"} />
+      <AppTable minWidth={"50rem"} />
     </div>
   );
 }

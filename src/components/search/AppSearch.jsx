@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-//import { Checkbox } from "@material-tailwind/react";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
-import fetchData from "./FetchData";
 import { Button } from "primereact/button";
-import { classNames } from "primereact/utils";
-
 import { useStore } from "../../zustand/Store";
 import moment from "moment/moment";
+import _debounce from "lodash/debounce";
 
-function AppSearch({ onSearchFiltersChange }) {
+function AppSearch() {
   const {
     zuDelData,
     zuEditData,
@@ -35,37 +32,14 @@ function AppSearch({ onSearchFiltersChange }) {
     zu_MasterTransporters,
   } = useStore();
 
-  //console.log("zu_MasterCustomers: ", zu_MasterCustomers);
-
   const [dataCustomers, setDataCustomers] = useState([]);
   const [dataProducts, setDataProducts] = useState([]);
   const [dataWeighttypes, setDataWeighttypes] = useState([]);
   const [dataDrivers, setDataDrivers] = useState([]);
   const [dataTransporters, setDataTransporters] = useState([]);
   const [activeIndex, setActiveIndex] = useState();
-  //console.log("dataTransporters: ", dataTransporters);
-  /*   const [filters, setFilters] = useState({
-    WeightScaleIDInFilter: false,
-    weightScaleIDOutFilter: false,
-    SequenceWeightInFilter: false,
-    SequenceWeightOutFilter: false,
-    WeightDateInFilter: false,
-    WeightTimeInFilter: false,
-    WeightDateOutFilter: false,
-    WeightTimeOutFilter: false,
-    CarRegisterFilter: false,
-    WeightTypeIDFilter: false,
-    CustomerIDFilter: false,
-    ProductIDFilter: false,
-    TransporterIDFilter: false,
-    DriverIDFilter: false,
-    RFIDTagIDFilter: false,
-    FlagStatusFilter: false,
-    FlagCancelFilter: false,
-    FlagPaymentFilter: false,
-  }); */
 
-  const [filters2, setFilters2] = useState([
+  const [searchFilters, setSearchFilters] = useState([
     {
       Title: "เครื่องชั่งขาเข้า",
       Filter: false,
@@ -81,18 +55,18 @@ function AppSearch({ onSearchFiltersChange }) {
       To: "",
     },
     {
-      Title: "เวลาชั่งเข้า",
+      Title: "วันที่ชั่งเข้า",
       Filter: false,
       Typeinput: "calendar",
-      From: new Date(),
-      To: new Date(),
+      From: moment(new Date()).startOf("day").format("DD/MM/YYYY HH:mm:ss"),
+      To: moment(new Date()).startOf("day").format("DD/MM/YYYY HH:mm:ss"),
     },
     {
-      Title: "เวลาชั่งออก",
+      Title: "วันที่ชั่งออก",
       Filter: false,
       Typeinput: "calendar",
-      From: new Date(),
-      To: new Date(),
+      From: moment(new Date()).startOf("day").format("DD/MM/YYYY HH:mm:ss"),
+      To: moment(new Date()).startOf("day").format("DD/MM/YYYY HH:mm:ss"),
     },
     {
       Title: "เลขที่เข้า",
@@ -110,18 +84,18 @@ function AppSearch({ onSearchFiltersChange }) {
     },
     {
       Title: "ทะเบียนรถ",
-      Filter: false,
+      Filter: true,
       Typeinput: "text",
-      From: "",
-      To: "",
+      From: "80-0004",
+      To: "80-0004",
     },
     {
       Tablename: "weighttype",
       Title: "ประเภทชั่ง",
       Filter: false,
       Typeinput: "dropdown",
-      From: "Select a Country",
-      To: "Select a Country",
+      From: "",
+      To: "",
     },
     {
       Tablename: "customer",
@@ -136,24 +110,24 @@ function AppSearch({ onSearchFiltersChange }) {
       Title: "สินค้า",
       Filter: false,
       Typeinput: "dropdown",
-      From: "Select a Country",
-      To: "Select a Country",
+      From: "",
+      To: "",
     },
     {
       Tablename: "transporter",
       Title: "ผู้ขนส่ง",
       Filter: false,
       Typeinput: "dropdown",
-      From: "Select a Country",
-      To: "Select a Country",
+      From: "",
+      To: "",
     },
     {
       Tablename: "driver",
       Title: "พนักงานขับรถ",
       Filter: false,
       Typeinput: "dropdown",
-      From: "Select a Country",
-      To: "Select a Country",
+      From: "",
+      To: "",
     },
     {
       Title: "สถานะการยกเลิก",
@@ -177,49 +151,6 @@ function AppSearch({ onSearchFiltersChange }) {
       To: "",
     },
   ]);
-
-  /*   const fetchDataAndSetState = async () => {
-    try {
-      await fetchData(
-        "https://theothai.com/ttw_webreport/API/api/customer/read.php",
-        {
-          method: "GET",
-          headers: {
-            "API-KEY": "857F7237C03246028748D51C97D4BADE",
-          },
-        },
-        setDataCustomers
-      );
-      await fetchData(
-        "https://theothai.com/ttw_webreport/API/api/product/read.php",
-        { method: "GET" },
-        setDataProducts
-      );
-      await fetchData(
-        "https://theothai.com/ttw_webreport/API/api/weighttype/read.php",
-        { method: "GET" },
-        setDataWeighttypes
-      );
-      await fetchData(
-        "https://theothai.com/ttw_webreport/API/api/driver/read.php",
-        { method: "GET" },
-        setDataDrivers
-      );
-      await fetchData(
-        "https://theothai.com/ttw_webreport/API/api/transporter/read.php",
-        { method: "GET" },
-        setDataTransporters
-      );
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error;
-    }
-  }; */
-
-  //load Data
-  /*   useEffect(() => {
-    //fetchDataAndSetState();
-  }, []); */
 
   useEffect(() => {
     setDataCustomers(
@@ -253,19 +184,16 @@ function AppSearch({ onSearchFiltersChange }) {
 
   //filterKey คือตัวเลข
   const handleCheckbox = (i) => {
-    const updatedFilters = [...zu_SearchFilters];
-    console.log([...zu_SearchFilters]);
+    const updatedFilters = [...searchFilters];
+    //console.log([...searchFilters]);
     updatedFilters[i] = {
       ...updatedFilters[i],
       Filter: !updatedFilters[i].Filter,
     };
-
-    // Update the Zustand store with the new filters
-    zuSetSearchFiltersCheckbox(updatedFilters);
+    setSearchFilters(updatedFilters);
   };
-  //console.log("zu_SearchFilters ", zu_SearchFilters);
 
-  const handleText = (index, fromorto, newValue) => {
+  /*   const handleText = (index, fromorto, newValue) => {
     //console.log("newValue ", newValue);
     if (fromorto === "From") {
       const updatedFilters = [...zu_SearchFilters];
@@ -282,9 +210,28 @@ function AppSearch({ onSearchFiltersChange }) {
       };
       zuSetSearchFiltersTextbox(updatedFilters);
     }
+  }; */
+  const handleText = _debounce((index, fromorto, newValue) => {
+    if (fromorto === "From") {
+      const updatedFilters = [...searchFilters];
+      updatedFilters[index] = {
+        ...updatedFilters[index],
+        From: newValue,
+      };
+      setSearchFilters(updatedFilters);
+    } else if (fromorto === "To") {
+      const updatedFilters = [...searchFilters];
+      updatedFilters[index] = {
+        ...updatedFilters[index],
+        To: newValue,
+      };
+      setSearchFilters(updatedFilters);
+    }
+  }, 30); // 300 milliseconds debounce time
+  const handlesend = () => {
+    // Update the Zustand store with the new filters
+    zuSetSearchFiltersTextbox(searchFilters);
   };
-
-  //datas.map((datas) => console.log(datas.WeightTypeID, datas.WeightTypeName));
 
   const renderSwitch = (
     typeinput,
@@ -304,7 +251,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <InputText
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={zu_SearchFilters[index].From}
+                value={searchFilters[index].From}
                 onChange={(e) => handleText(index, fromorto, e.target.value)}
               />
             )}
@@ -313,7 +260,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <InputText
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={zu_SearchFilters[index].To}
+                value={searchFilters[index].To}
                 onChange={(e) => handleText(index, fromorto, e.target.value)}
               />
             )}
@@ -329,7 +276,7 @@ function AppSearch({ onSearchFiltersChange }) {
                 //showTime
                 //value={zu_SearchFilters[index].From}
                 value={moment(
-                  zu_SearchFilters[index].From,
+                  searchFilters[index].From,
                   "YYYY-MM-DD HH:mm:ss"
                 ).toDate()}
                 onChange={(e) =>
@@ -351,7 +298,7 @@ function AppSearch({ onSearchFiltersChange }) {
                 className="w-[100%]"
                 //showTime
                 value={moment(
-                  zu_SearchFilters[index].To,
+                  searchFilters[index].To,
                   "DD/MM/YYYY HH:mm:ss"
                 ).toDate()}
                 onChange={(e) =>
@@ -376,7 +323,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <Dropdown
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={zu_SearchFilters[index].From}
+                value={searchFilters[index].From}
                 onChange={(e) => handleText(index, fromorto, e.value)}
                 options={
                   tablename === "weighttype"
@@ -416,7 +363,7 @@ function AppSearch({ onSearchFiltersChange }) {
               <Dropdown
                 disabled={filter ? false : true}
                 className="w-[100%]"
-                value={zu_SearchFilters[index].To}
+                value={searchFilters[index].To}
                 onChange={(e) => handleText(index, fromorto, e.value)}
                 options={
                   tablename === "weighttype"
@@ -460,7 +407,7 @@ function AppSearch({ onSearchFiltersChange }) {
             {fromorto === "From" && (
               <Dropdown
                 className="min-w-[7rem] max-w-10rem sm:md:ml-[61px]"
-                value={zu_SearchFilters[index].Filter}
+                value={searchFilters[index].Filter}
                 onChange={(e) => handleCheckbox(index, fromorto, e.value)}
                 options={[
                   { show: "ใช่", value: true },
@@ -480,8 +427,6 @@ function AppSearch({ onSearchFiltersChange }) {
     }
   };
 
-  
-
   const onClickClose = () => {
     if (activeIndex.length === 0) {
       // If no tabs are open, open all tabs
@@ -492,18 +437,12 @@ function AppSearch({ onSearchFiltersChange }) {
     }
   };
 
-  /*   useEffect(() => {
-    //zuSetSearchFilters(filters2);
-    console.log("????????????");
-  }, [filters2]); */
-
   const handleSearch = () => {
-    //onSearchFiltersChange(filters2);
     zuSetTitleFromAddEdit("search");
-    //zuSetSearchFilters(filters2);
+    handlesend();
     zuToggleSearch();
   };
-  //console.log("zu_SearchFilters ", zu_SearchFilters);
+
   return (
     <div>
       <Accordion
@@ -519,7 +458,7 @@ function AppSearch({ onSearchFiltersChange }) {
         >
           <div className="">
             <div className="flex flex-col align-items-center">
-              {zu_SearchFilters.map((e, i) => (
+              {searchFilters.map((e, i) => (
                 // eslint-disable-next-line react/jsx-key
                 <div key={i} className="flex flex-col md:flex-row">
                   <div className="flex">
@@ -579,6 +518,7 @@ function AppSearch({ onSearchFiltersChange }) {
                   )}
                 </div>
               ))}
+
               <div className="flex justify-end gap-2">
                 <Button
                   className=" p-2 w-24 h-10"

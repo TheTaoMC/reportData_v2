@@ -3,10 +3,13 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+} from "react-router-dom";
 import AppWeight from "./components/weight/AppWeight.jsx";
-import TableData2 from "./components/TableDatas2.jsx";
 import AppProduct from "./components/product/AppProduct";
 import AppCustomer from "./components/customer/AppCustomer.jsx";
 import AppWeighttype from "./components/weighttype/AppWeighttype.jsx";
@@ -33,10 +36,6 @@ const router = createBrowserRouter([
   {
     path: "weightreport",
     element: <AppWeightreport />,
-  },
-  {
-    path: "tableData2",
-    element: <TableData2 />,
   },
   {
     path: "product",
@@ -70,7 +69,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <BrowserRouter basename={"/"}>
+        <RouterProvider router={router} />
+      </BrowserRouter>
     </>
   );
 }

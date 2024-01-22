@@ -5,7 +5,7 @@ import { Toast } from "primereact/toast";
 import { Menu } from "primereact/menu";
 import "primeicons/primeicons.css";
 import AddData from "../AddData";
-import AppSearch from "./AppSearch";
+import AppSearch from "../search/AppSearch";
 
 import { useStore } from "../../zustand/Store";
 

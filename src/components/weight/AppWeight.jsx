@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import AppNavber from "../navbar/AppNavber";
-import AppFetch from "../fetch/AppFetch";
+import AppTable from "../table/AppTable";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import isEqual from "lodash/isEqual";
@@ -617,7 +617,7 @@ function AppWeight() {
       const result = await zuFetchMaster();
       //console.log(result);
       setBlocked(result === "success" ? false : true);
-    }; 
+    };
   }, [zuFetchMaster]); // Dependencies ใน useMemo
 
   useEffect(() => {
@@ -674,7 +674,7 @@ function AppWeight() {
     <div>
       <BlockUI blocked={blocked} fullScreen />
       <AppNavber />
-      <AppFetch statusTemplate={statusTemplate} minWidth={"50rem"} />
+      <AppTable statusTemplate={statusTemplate} minWidth={"50rem"} />
     </div>
   );
 }

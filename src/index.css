@@ -19,7 +19,7 @@
 
 @font-face {
   font-family: "Kanit-Regular";
-  src: local("Kanit-Regular"), url(./fonts/Kanit-Regular.woff) format("woff");
+  src: local("Kanit-Regular"), url(./fonts/Kanit-Regular.tff) format("ttf");
 }
 
 . {

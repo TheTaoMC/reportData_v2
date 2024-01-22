@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
-import AppFetch from "../fetch/AppFetch";
+import AppTable from "../table/AppTable";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
@@ -218,7 +218,7 @@ function AppProduct() {
   return (
     <div>
       <AppNavber />
-      <AppFetch sortField={"ProductName"} minWidth={"10rem"} />
+      <AppTable sortField={"ProductName"} minWidth={"10rem"} />
     </div>
   );
 }

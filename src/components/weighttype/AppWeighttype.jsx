@@ -1,7 +1,7 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AppNavber from "../navbar/AppNavber";
-import AppFetch from "../fetch/AppFetch";
+import AppTable from "../table/AppTable";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
@@ -26,7 +26,8 @@ function AppWeighttype() {
     zuSetDataID,
     zuSetEdit,
     zuSetColumns,
-    zuSetTitle,zuCheckUser
+    zuSetTitle,
+    zuCheckUser,
   } = useStore();
   //console.log("zu_ToggleEdit: ", zu_ToggleEdit);
   const navigate = useNavigate();
@@ -105,9 +106,9 @@ function AppWeighttype() {
       field: "FlagCancel",
       header: "FlagCancel",
       align: "center",
-      alignHeader:"center",
+      alignHeader: "center",
       body: (rowData) => {
-        return rowData.FlagCancel ==='N' ? "ใช้งาน" : "ยกเลิก";
+        return rowData.FlagCancel === "N" ? "ใช้งาน" : "ยกเลิก";
       },
     },
   ];
@@ -189,6 +190,7 @@ function AppWeighttype() {
       zuSetEdit(urledit, optionedit);
       //console.log(urledit, optionedit);
     }
+    console.log(weightTypeName, weightTypeID, flagCancel);
   }, [weightTypeName, weightTypeID, flagCancel]);
 
   //Load Data รอบแรก
@@ -225,32 +227,7 @@ function AppWeighttype() {
   return (
     <div>
       <AppNavber />
-      <AppFetch
-        sortField={"WeightTypeName"}
-        /* fetchDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/weighttype/read.php"
-        }
-        delDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/weighttype/delete.php"
-        }
-        addDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/weighttype/create.php"
-        }
-        editDataURL={
-          "https://theotesteng.000webhostapp.com/API/api/weighttype/update.php"
-        } */
-        //fetchDataBody={fetchDataBody}
-        //delDataBody={delDataBody}
-        //addDataBody={weightTypeID === "" ? null : addDataBody}
-        //editDataBody={editDataBody}
-        //columns={columns}
-        minWidth={"10rem"}
-        //selectedlistOut={upDatedataID}
-        //child={addedit}
-        //resetState={resetState}
-        //setState={setState}
-        //dataID={dataID}
-      />
+      <AppTable sortField={"WeightTypeName"} minWidth={"10rem"} />
     </div>
   );
 }
