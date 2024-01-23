@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
+    "buildes": "esbuild --bundle src/main.jsx src/App.jsx --outdir=dist --loader:.svg=file --loader:.woff2=file --loader:.woff=file --loader:.eot=file --loader:.ttf=file",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 6789"
   },
@@ -19,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "bcryptjs-react": "^2.4.6",
     "chart.js": "^4.4.1",
+    "esbuild": "^0.19.11",
     "file-saver": "^2.0.5",
     "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",
@@ -36,19 +38,22 @@
     "xlsx": "^0.18.5",
     "zustand": "^4.4.7"
   },
-  "homepage": "http://192.168.1.77/",
+  "homepage": "http://localhost:7777/webreport/",
   "devDependencies": {
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.4.16",
     "dotenv-webpack": "^8.0.1",
+    "esbuild-loader": "^4.0.2",
     "eslint": "^8.53.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "file-loader": "^6.2.0",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
+    "url-loader": "^4.1.1",
     "vite": "^5.0.0"
   }
 }

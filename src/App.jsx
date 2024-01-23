@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 
 import {
@@ -8,6 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Route,
+  HashRouter,
 } from "react-router-dom";
 import AppWeight from "./components/weight/AppWeight.jsx";
 import AppProduct from "./components/product/AppProduct";
@@ -20,58 +18,62 @@ import AppWeightreport from "./components/weightreport/AppWeightreport.jsx";
 import AppMain from "./components/main/AppMain.jsx";
 import AppUser from "./components/user/AppUser.jsx";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      index: true,
+      element: <AppLogin />,
+    },
+    {
+      path: "main",
+      element: <AppMain />,
+    },
+    {
+      path: "weight",
+      element: <AppWeight />,
+    },
+    {
+      path: "weightreport",
+      element: <AppWeightreport />,
+    },
+    {
+      path: "product",
+      element: <AppProduct />,
+    },
+    {
+      path: "customer",
+      element: <AppCustomer />,
+    },
+    {
+      path: "weighttype",
+      element: <AppWeighttype />,
+    },
+    {
+      path: "driver",
+      element: <AppDriver />,
+    },
+    {
+      path: "transporter",
+      element: <AppTransporter />,
+    },
+    {
+      path: "user",
+      element: <AppUser />,
+    },
+    {
+      path: "login",
+      element: <AppLogin />,
+    },
+  ],
   {
-    path: "/",
-    element: <AppLogin />,
-  },
-  {
-    path: "main",
-    element: <AppMain />,
-  },
-  {
-    path: "weight",
-    element: <AppWeight />,
-  },
-  {
-    path: "weightreport",
-    element: <AppWeightreport />,
-  },
-  {
-    path: "product",
-    element: <AppProduct />,
-  },
-  {
-    path: "customer",
-    element: <AppCustomer />,
-  },
-  {
-    path: "weighttype",
-    element: <AppWeighttype />,
-  },
-  {
-    path: "driver",
-    element: <AppDriver />,
-  },
-  {
-    path: "transporter",
-    element: <AppTransporter />,
-  },
-  {
-    path: "user",
-    element: <AppUser />,
-  },
-  {
-    path: "login",
-    element: <AppLogin />,
-  },
-]);
+    basename: "/webreport",
+  }
+);
 function App() {
   return (
     <>
-      <BrowserRouter basename={"/"}>
-        <RouterProvider router={router} />
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </>
   );
 }

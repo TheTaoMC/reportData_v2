@@ -6,7 +6,7 @@ import Doughnut from "./Doughnut";
 import AppCard from "./Cards/AppCard";
 import { Card, DonutChart, Title } from "@tremor/react";
 import Area from "./Area";
-import { data } from "../../assets/data/data.jsx";
+import { data } from "../data/data.jsx";
 
 function AppDashboard() {
   const data1 = [

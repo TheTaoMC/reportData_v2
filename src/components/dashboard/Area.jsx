@@ -1,6 +1,6 @@
 import React from "react";
 import { AreaChart, Card, Title } from "@tremor/react";
-import { data } from "../../assets/data/data.jsx";
+import { data } from "../data/data.jsx";
 
 const chartdata = [
   {

@@ -9,9 +9,8 @@ import "primereact/resources/themes/bootstrap4-light-blue/theme.css"; // theme
 //import "primeflex/primeflex.css"; // css utility
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.css"; // core css
-
+import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
-
 
 //import { RecoilDevTools } from "recoil-gear";
 
