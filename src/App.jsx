@@ -5,6 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Route,
+  Routes,
   HashRouter,
 } from "react-router-dom";
 import AppWeight from "./components/weight/AppWeight.jsx";

@@ -38,7 +38,7 @@
     "xlsx": "^0.18.5",
     "zustand": "^4.4.7"
   },
-  "homepage": "http://localhost:7777/webreport/",
+  "homepage": "http://server/webreport/",
   "devDependencies": {
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
