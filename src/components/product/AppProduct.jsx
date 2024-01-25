@@ -6,12 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Checkbox } from "primereact/checkbox";
-
+import debounce from "lodash/debounce";
 import { useStore } from "../../zustand/Store";
 
 function AppProduct() {
   const {
-    zu_Data,
     zu_SelectedList,
     zu_ToggleResetState,
     zu_ToggleEdit,
@@ -30,12 +29,21 @@ function AppProduct() {
     zuSetTitle,
     zuCheckUser,
   } = useStore();
+  const uuidDataID = uuidv4();
   const navigate = useNavigate();
   const [dataID, setDataID] = useState("");
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState(0.0);
   const [flagCancel, setFlagCancel] = useState(false);
+
+  const [formData, setFormData] = useState({
+    DataID: productID === "" ? "" : uuidDataID,
+    ProductID: productID,
+    ProductName: productName,
+    Price: price,
+    FlagCancel: flagCancel ? "Y" : "N",
+  });
 
   const resetState = () => {
     setDataID("");
@@ -93,10 +101,12 @@ function AppProduct() {
         <InputText
           autoFocus
           className="w-[100%]"
-          value={productID}
+          value={formData.ProductID}
           onChange={(e) => {
-            //setDataID(e.target.value)
-            setProductID(e.target.value);
+            setFormData({
+              ...formData,
+              ProductID: e.target.value,
+            });
           }}
         />
       </div>
@@ -158,10 +168,12 @@ function AppProduct() {
         }),
       };
       zuSetDataID(uuidDataID, productID);
-      zuSetFromAddEdit(addedit);
+      //zuSetFromAddEdit(addedit);
       zuSetAdd(urladd, optionadd);
       console.log(urladd, optionadd);
-    } else {
+    }
+
+    if (zu_Title_Form_AddEdit === "edit") {
       console.log("Edit...");
       const urledit =
         "https://theothai.com/ttw_webreport/API/api/product/update.php";
@@ -181,6 +193,10 @@ function AppProduct() {
       console.log(urledit, optionedit);
     }
   }, [productID, productName, price, flagCancel]);
+
+  /*   useEffect(() => {
+    zuSetFromAddEdit(addedit);
+  }, [productID, productName, price, flagCancel]); */
 
   //Load Data รอบแรก
   useEffect(() => {

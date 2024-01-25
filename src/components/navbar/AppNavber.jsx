@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { useStore } from "../../zustand/Store";
 
 function AppNavber({ title }) {
-  const { zuCheckUser } = useStore();
+  const { zuCheckUser,zuSetTitleFromAddEdit } = useStore();
   const navigate = useNavigate();
   const menuData = useRef(null);
   const menuReport = useRef(null);
@@ -56,6 +56,7 @@ function AppNavber({ title }) {
     {
       label: "Weight",
       command: () => {
+        zuSetTitleFromAddEdit("weight");
         navigate("/Weight");
       },
       //icon: "pi pi-times",

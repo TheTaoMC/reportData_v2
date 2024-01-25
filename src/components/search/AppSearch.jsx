@@ -227,7 +227,7 @@ function AppSearch() {
       };
       setSearchFilters(updatedFilters);
     }
-  }, 30); // 300 milliseconds debounce time
+  }, 1); // 300 milliseconds debounce time
   const handlesend = () => {
     // Update the Zustand store with the new filters
     zuSetSearchFiltersTextbox(searchFilters);

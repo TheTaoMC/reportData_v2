@@ -10,8 +10,6 @@ import { useStore } from "../../zustand/Store";
 import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
-import { Title } from "@tremor/react";
-import _debounce from "lodash/debounce";
 
 function AppWeight() {
   const {
@@ -49,8 +47,25 @@ function AppWeight() {
     zuSetTitleFromAddEdit,
   } = useStore();
   const navigate = useNavigate();
+  //const [dataID, setDataID] = useState("");
+  /*   const [driverID, setDriverID] = useState(""); */
+  /*   const [driverName, setDriverName] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState(""); */
 
-  const [selectedList, setSelectedList] = useState(zu_SelectedList);
+  /*   const [xx, setXx] = useState([]);
+  const [carRegister, setCarRegister] = useState("");
+  const [weightType, setWeightType] = useState("");
+  const [customer, setCustomer] = useState("");
+  const [product, setProduct] = useState("");
+  const [driver, setDriver] = useState("");
+  const [transporter, setTransporter] = useState("");
+  const [remark1, setRemark1] = useState("");
+  const [remark2, setRemark2] = useState("");
+  const [remark3, setRemark3] = useState("");
+  const [flagCancel, setFlagCancel] = useState(false); */
+  //console.log("zu_MasterWeighttypes ", zu_MasterWeighttypes);
+  //console.log(zu_permission);
 
   const option = {
     method: "POST",
@@ -95,30 +110,13 @@ function AppWeight() {
       //FlagStatusFilter: bodySearch[13].Filter ? "Y" : "N",
     }),
   };
-
-  //
-
-  //
-
+  //console.log("zu_SelectedList ", zu_SelectedList);
   const addedit = (
-    
-    <InputText
-      className="w-[100%]"
-      value={zu_SelectedList.Remark1 || ""}
-      onChange={(e) => {
-        const newValue = e.target.value;
-        const updatedZuSelectedList = {
-          ...zu_SelectedList,
-          Remark1: newValue,
-        };
-        zuSelectedList(updatedZuSelectedList);
-      }}
-    />
-
-    /*     <div>
+    <div>
       <div>ทะเบียนรถ</div>
       <div>
         <InputText
+          //autoFocus
           disabled={true}
           className="w-[100%]"
           value={zu_SelectedList.CarRegister || ""}
@@ -128,6 +126,7 @@ function AppWeight() {
       <div>
         <Dropdown
           autoFocus
+          //disabled={filter ? false : true}
           className="w-[100%]"
           value={zu_SelectedList.WeightTypeDataID}
           onChange={(e) => {
@@ -141,9 +140,13 @@ function AppWeight() {
               WeightTypeID: newValue2.WeightTypeID,
               WeightTypeName: newValue2.WeightTypeName,
             };
+            //console.log("e.target.value2 ", newValue2);
+            //console.log("updatedZuSelectedList ", updatedZuSelectedList);
             zuSelectedList(updatedZuSelectedList);
           }}
+          //onChange={(e) => setWeightType(e?.DataID || "")}
           options={zu_MasterWeighttypes.map((data) => ({
+            //value0: data.DataID,
             value: data.DataID,
             label: data.WeightTypeID + " : " + data.WeightTypeName,
           }))}
@@ -155,6 +158,7 @@ function AppWeight() {
       <div>คู่ค้า</div>
       <div>
         <Dropdown
+          //disabled={filter ? false : true}
           className="w-[100%]"
           value={zu_SelectedList.CustomerDataID}
           onChange={(e) => {
@@ -182,6 +186,7 @@ function AppWeight() {
       <div>สินค้า</div>
       <div>
         <Dropdown
+          //disabled={filter ? false : true}
           className="w-[100%]"
           value={zu_SelectedList.ProductDataID}
           onChange={(e) => {
@@ -209,6 +214,7 @@ function AppWeight() {
       <div>ผู้ขนส่ง</div>
       <div>
         <Dropdown
+          //disabled={filter ? false : true}
           className="w-[100%]"
           value={zu_SelectedList.TransporterDataID}
           onChange={(e) => {
@@ -236,6 +242,7 @@ function AppWeight() {
       <div>พนักงานขับรถ</div>
       <div>
         <Dropdown
+          //disabled={filter ? false : true}
           className="w-[100%]"
           value={zu_SelectedList.DriverDataID}
           onChange={(e) => {
@@ -417,7 +424,7 @@ function AppWeight() {
           </div>
         </div>
       </div>
-    </div> */
+    </div>
   );
 
   const columns = [
@@ -553,7 +560,6 @@ function AppWeight() {
   //console.log("zu_Title_Form_AddEdit ", zu_Title_Form_AddEdit);
   //setFromAddEdit //AddData
   useEffect(() => {
-    //console.log("useEffect add edit");
     if (zu_Title_Form_AddEdit === "add") {
       /* if (zu_SelectedList.length === 0) { */
       console.log("Add...");
@@ -596,7 +602,6 @@ function AppWeight() {
 
   //Load Data 2
   useEffect(() => {
-    console.log("useEffect Load Data 2");
     if (zu_Title_Form_AddEdit === "search") {
       //zuResetData();
       const urlread =
@@ -624,7 +629,7 @@ function AppWeight() {
   useEffect(() => {
     zuCheckUser(() => navigate("/"));
     zuSetTitleFromAddEdit("weight");
-    //console.log("zu_Title_Form_AddEdit ", zu_Title_Form_AddEdit, zu_Title);
+    console.log("zu_Title_Form_AddEdit ", zu_Title_Form_AddEdit, zu_Title);
     if (zu_Title_Form_AddEdit === "weight" || zu_Title_Form_AddEdit === null) {
       zuResetData();
       const urlread =

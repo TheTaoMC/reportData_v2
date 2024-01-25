@@ -68,7 +68,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: "/webreport",
+    //basename: "/webreport",
   }
 );
 function App() {

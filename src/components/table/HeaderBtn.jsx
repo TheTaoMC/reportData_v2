@@ -17,11 +17,6 @@ const header = (dt, onSearchFiltersChange) => {
     zu_Columns,
     zu_Data,
     zu_Title,
-    zu_MasterCustomers,
-    zu_MasterWeighttypes,
-    zu_MasterProducts,
-    zu_MasterTransporters,
-    zu_MasterDrivers,
     zu_permission,
   } = useStore();
   const {
@@ -125,16 +120,9 @@ const header = (dt, onSearchFiltersChange) => {
     zuSetTitleFromAddEdit("add");
     zuToggleResetState();
     zuToggleVisible();
-    /*     if (!visibleAdd) {
-      setVisibleAdd(true);
-    } else {
-      setVisibleAdd(false);
-    } */
   };
 
   const handleClickEdit = () => {
-    zuSetTitleFromAddEdit("edit");
-
     if (zu_SelectedList.length === 0) {
       console.log("ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข");
       toast.current.show({
@@ -143,31 +131,13 @@ const header = (dt, onSearchFiltersChange) => {
         detail: "ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข",
         life: 3000,
       });
+
       return;
     } else {
+      zuSetTitleFromAddEdit("edit");
       zuToggleEdit();
       zuToggleVisible();
     }
-
-    /*     if (!visibleEdit) {
-      if (zu_SelectedList.length === 0) {
-        console.log("ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข");
-        toast.current.show({
-          severity: "warn",
-          summary: "แจ้งเตือน",
-          detail: "ไม่ได้เลือกข้อมูล กรุณาเลือกข้อมูลที่ต้องการแก้ไข",
-          life: 3000,
-        });
-        return;
-      }
-
-      //console.log(zu_SelectedList.length);
-      zuToggleEdit();
-      setVisibleEdit(true);
-    } else {
-      setVisibleEdit(false);
-      zuToggleResetState();
-    } */
   };
   //console.log("zu_permission ", zu_permission);
   const menu = useRef(null);

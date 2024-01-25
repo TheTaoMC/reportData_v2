@@ -229,7 +229,7 @@ export const useStore = create((set, get) => ({
     },
     zuFetch: async () => {
         try {
-            console.log('get() ', get().zu_Url_Fetch, get().zu_Option_Fetch);
+            //console.log('get() ', get().zu_Url_Fetch, get().zu_Option_Fetch);
             const response = await fetch(get().zu_Url_Fetch, get().zu_Option_Fetch);
             if (!response.ok) {
                 set({ zu_Data: [] });

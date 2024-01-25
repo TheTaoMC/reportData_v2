@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import header from "./HeaderBtn";
@@ -8,6 +8,7 @@ import { useStore } from "../../zustand/Store";
 function AppTable({ sortField, minWidth, onSearchFiltersChange }) {
   const { zu_Data, zu_SelectedList, zu_Columns, zu_Title } = useStore();
   const { zuSelectedList } = useStore();
+  const [selectedList, setSelectedList] = useState([]);
   const dt = useRef(null);
 
   const funheader = () => {
@@ -42,10 +43,9 @@ function AppTable({ sortField, minWidth, onSearchFiltersChange }) {
             selectionMode="single"
             selection={zu_SelectedList}
             onSelectionChange={(e) => {
-              //setSelectedlist(e.value);
+              //setSelectedList(e.value);
               //selectedlistOut(e.value);
               zuSelectedList(e.value);
-              //v2
             }}
             dataKey="DataID"
             metaKeySelection={true}
