@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
-    "buildes": "esbuild --bundle src/main.jsx src/App.jsx --outdir=dist --loader:.svg=file --loader:.woff2=file --loader:.woff=file --loader:.eot=file --loader:.ttf=file",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 6789"
   },
