@@ -9,7 +9,7 @@ import AppSearch from "../search/AppSearch";
 
 import { useStore } from "../../zustand/Store";
 
-const header = (dt, onSearchFiltersChange) => {
+const header = (dt, onSearchFiltersChange,form) => {
   const {
     zu_SelectedList,
     zu_Url_Del,
@@ -277,7 +277,7 @@ const header = (dt, onSearchFiltersChange) => {
                 onClick={handleClickAdd}
               />
             )}
-            <AddData />
+            <AddData form={form}/>
 
             <Button
               visible={

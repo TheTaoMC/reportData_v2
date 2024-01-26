@@ -262,7 +262,7 @@ function AppProduct() {
   return (
     <div>
       <AppNavber />
-      <AppTable sortField={"ProductName"} minWidth={"10rem"} />
+      <AppTable sortField={"ProductName"} minWidth={"10rem"} form={addedit}/>
     </div>
   );
 }

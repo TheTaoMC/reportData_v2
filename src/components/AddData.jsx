@@ -5,7 +5,8 @@ import { Toast } from "primereact/toast";
 
 import { useStore } from "../zustand/Store";
 
-const AddData = () => {
+const AddData = ({ form }) => {
+  console.log(form);
   const { zu_Form_AddEdit, zu_Title_Form_AddEdit, zu_ToggleVisible } =
     useStore();
   const { zuAddData, zuEditData, zuToggleResetState, zuToggleVisible } =
@@ -70,7 +71,8 @@ const AddData = () => {
           zuToggleVisible();
         }}
       >
-        {zu_Form_AddEdit}
+        {form}
+        {/* zu_Form_AddEdit */}
 
         <div className="flex gap-2 mt-2">
           <Button
