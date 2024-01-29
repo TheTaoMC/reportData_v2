@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import moment from "moment/moment";
 
 export const useStore = create((set, get) => ({
-    bears: 0,
     zu_ToggleResetState: false,
     zu_ToggleEdit: false,
     zu_ToggleVisible: false,
@@ -161,8 +160,6 @@ export const useStore = create((set, get) => ({
 
     zu_Url_Del: "",
     zu_Option_Del: {},
-    increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-    removeAllBears: () => set({ bears: 0 }),
     zuSetSearchFiltersCheckbox: (updatedFilters) => set({ zu_SearchFilters: updatedFilters }),
     zuSetSearchFiltersTextbox: (updatedFilters) => set({ zu_SearchFilters: updatedFilters }),
 

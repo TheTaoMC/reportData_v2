@@ -10,18 +10,18 @@ import "primereact/resources/themes/bootstrap4-light-blue/theme.css"; // theme
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.css"; // core css
 import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
+
 
 //import { RecoilDevTools } from "recoil-gear";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <React.StrictMode>
-    <RecoilRoot>
+
       <PrimeReactProvider>
         <App />
       </PrimeReactProvider>
-    </RecoilRoot>
+
     </React.StrictMode>
   </>
 );

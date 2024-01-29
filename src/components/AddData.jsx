@@ -5,8 +5,7 @@ import { Toast } from "primereact/toast";
 
 import { useStore } from "../zustand/Store";
 
-const AddData = ({ form }) => {
-  console.log(form);
+const AddData = () => {
   const { zu_Form_AddEdit, zu_Title_Form_AddEdit, zu_ToggleVisible } =
     useStore();
   const { zuAddData, zuEditData, zuToggleResetState, zuToggleVisible } =
@@ -35,6 +34,7 @@ const AddData = ({ form }) => {
       }
 
       zuToggleResetState();
+      zuToggleVisible();
     } else {
       console.log("edit");
       const data = await zuEditData();
@@ -71,8 +71,7 @@ const AddData = ({ form }) => {
           zuToggleVisible();
         }}
       >
-        {form}
-        {/* zu_Form_AddEdit */}
+        {zu_Form_AddEdit}
 
         <div className="flex gap-2 mt-2">
           <Button

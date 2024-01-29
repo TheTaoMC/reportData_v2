@@ -11,7 +11,7 @@ import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Title } from "@tremor/react";
-import _debounce from "lodash/debounce";
+import debounce from "lodash/debounce";
 
 function AppWeight() {
   const {
@@ -48,6 +48,7 @@ function AppWeight() {
     zuCheckUser,
     zuSetTitleFromAddEdit,
   } = useStore();
+
   const navigate = useNavigate();
 
   const [selectedList, setSelectedList] = useState(zu_SelectedList);
@@ -96,26 +97,8 @@ function AppWeight() {
     }),
   };
 
-  //
-
-  //
-
   const addedit = (
-    
-    <InputText
-      className="w-[100%]"
-      value={zu_SelectedList.Remark1 || ""}
-      onChange={(e) => {
-        const newValue = e.target.value;
-        const updatedZuSelectedList = {
-          ...zu_SelectedList,
-          Remark1: newValue,
-        };
-        zuSelectedList(updatedZuSelectedList);
-      }}
-    />
-
-    /*     <div>
+    <div>
       <div>ทะเบียนรถ</div>
       <div>
         <InputText
@@ -264,8 +247,8 @@ function AppWeight() {
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark1 || ""}
-          onChange={(e) => {
+          defaultValue={zu_SelectedList.Remark1 || ""}
+          onBlur={(e) => {
             const newValue = e.target.value;
             const updatedZuSelectedList = {
               ...zu_SelectedList,
@@ -279,8 +262,8 @@ function AppWeight() {
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark2 || ""}
-          onChange={(e) => {
+          defaultValue={zu_SelectedList.Remark2 || ""}
+          onBlur={(e) => {
             const newValue = e.target.value;
             const updatedZuSelectedList = {
               ...zu_SelectedList,
@@ -294,8 +277,8 @@ function AppWeight() {
       <div>
         <InputText
           className="w-[100%]"
-          value={zu_SelectedList.Remark3 || ""}
-          onChange={(e) => {
+          defaultValue={zu_SelectedList.Remark3 || ""}
+          onBlur={(e) => {
             const newValue = e.target.value;
             const updatedZuSelectedList = {
               ...zu_SelectedList,
@@ -396,7 +379,7 @@ function AppWeight() {
         </table>
       </div>
       <div>
-        <div className="flex gap-2  justify-between">
+        <div className="mt-2 flex gap-2  justify-between">
           <div className="flex gap-2 items-center">
             <div>สถานะ</div>
             <Checkbox
@@ -417,7 +400,7 @@ function AppWeight() {
           </div>
         </div>
       </div>
-    </div> */
+    </div>
   );
 
   const columns = [
@@ -518,18 +501,26 @@ function AppWeight() {
     {
       field: "WeightIn",
       header: "WeightIn",
+      align: "right",
+      alignHeader: "right",
     },
     {
       field: "WeightOut",
       header: "WeightOut",
+      align: "right",
+      alignHeader: "right",
     },
     {
       field: "Weight",
       header: "Weight",
+      align: "right",
+      alignHeader: "right",
     },
     {
       field: "WeightNet",
       header: "WeightNet",
+      align: "right",
+      alignHeader: "right",
     },
   ];
 
@@ -676,3 +667,5 @@ function AppWeight() {
 }
 
 export default AppWeight;
+
+export const BigAppWeightMemo = React.memo(AppWeight);

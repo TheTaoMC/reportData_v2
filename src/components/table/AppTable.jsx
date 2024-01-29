@@ -5,14 +5,14 @@ import header from "./HeaderBtn";
 
 import { useStore } from "../../zustand/Store";
 
-function AppTable({ sortField, minWidth, onSearchFiltersChange,form }) {
+function AppTable({ sortField, minWidth, onSearchFiltersChange }) {
   const { zu_Data, zu_SelectedList, zu_Columns, zu_Title } = useStore();
   const { zuSelectedList } = useStore();
   const [selectedList, setSelectedList] = useState([]);
   const dt = useRef(null);
 
   const funheader = () => {
-    return header(dt, onSearchFiltersChange,form);
+    return header(dt, onSearchFiltersChange);
   };
   return (
     <>
